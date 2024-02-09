@@ -6,6 +6,10 @@ set -U EDITOR nvim
 
 status --is-interactive; and begin
     # Aliases
+    set -gx GPG_TTY (tty)
+    base16-dracula
+    set -g fish_greeting ""
+    thefuck --alias | source
     alias .. 'cd ..'
     alias :q exit
     alias cat 'bat'
@@ -29,18 +33,18 @@ status --is-interactive; and begin
 
     set -gx NVM_DIR "$HOME/.nvm"
 
-    set -g MANPAGER "sh -c 'col -bx | bat -l man -p'"
+    set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
     
-    set -g USE_GKE_GCLOUD_AUTH_PLUGIN true
+    set -gx USE_GKE_GCLOUD_AUTH_PLUGIN true
     
-    set -g BAT_THEME dracula
-    set -g TERM "xterm-256color"
+    set -gx BAT_THEME dracula
+    set -gx TERM "xterm-256color"
     
-    set -g JAVA_HOME "/Applications/Android Studio.app/Contents/jbr/Contents/Home"
-    set -g ANDROID_HOME "$HOME/Library/Android/sdk"
-    set -g NDK_HOME "$ANDROID_HOME/ndk/25.0.8775105"
+    set -gx JAVA_HOME "/Applications/Android Studio.app/Contents/jbr/Contents/Home"
+    set -gx ANDROID_HOME "$HOME/Library/Android/sdk"
+    set -gx NDK_HOME "$ANDROID_HOME/ndk/25.0.8775105"
 
-    set -g SSH_AUTH_SOCK "~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+    set -gx SSH_AUTH_SOCK "~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock"
 
     starship init fish | source
     source ~/.config/op/plugins.sh
