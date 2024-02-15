@@ -37,7 +37,6 @@ status --is-interactive; and begin
     
     set -gx USE_GKE_GCLOUD_AUTH_PLUGIN true
     
-    set -gx BAT_THEME dracula
     set -gx TERM "xterm-256color"
     
     set -gx JAVA_HOME "/Applications/Android Studio.app/Contents/jbr/Contents/Home"
