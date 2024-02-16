@@ -8,3 +8,16 @@ if test -f "/opt/homebrew/Caskroom/mambaforge/base/etc/fish/conf.d/mamba.fish"
     source "/opt/homebrew/Caskroom/mambaforge/base/etc/fish/conf.d/mamba.fish"
 end
 # <<< conda initialize <<<
+
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+if test -f $HOME/miniforge3/bin/conda
+    eval $HOME/miniforge3/bin/conda "shell.fish" "hook" $argv | source
+end
+
+if test -f "$HOME/miniforge3/etc/fish/conf.d/mamba.fish"
+    source "$HOME/miniforge3/etc/fish/conf.d/mamba.fish"
+end
+# <<< conda initialize <<<
+

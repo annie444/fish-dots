@@ -10,17 +10,15 @@ status --is-interactive; and begin
     base16-dracula
     set -g fish_greeting ""
     thefuck --alias | source
-    alias .. 'cd ..'
+    alias .. 'z ..'
+    alias cd 'z'
     alias :q exit
     alias cat 'bat'
     alias du 'dust' 
     alias g 'git'
-    alias la 'll -a'
-    alias ll 'ls -l --time-style long-iso --icons'
     alias ls 'eza --extended --bytes --links --blocksize --group --header --dereference --binary --octal-permissions --git --git-repos --long --all --all --icons --grid --classify --hyperlink --group-directories-first --time=modified --sort=extension --color=always --width=1 --time-style=long-iso'
     alias vimdiff 'nvim -d'
     alias find 'bfs'
-    alias fd 'bfs'
     alias gd 'batdiff'
     alias bathelp 'bat --plain --language=help'
     base16-dracula
@@ -48,11 +46,4 @@ status --is-interactive; and begin
     starship init fish | source
     source ~/.config/op/plugins.sh
 end
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-if test -f $HOME/miniforge3/bin/conda
-    eval $HOME/miniforge3/bin/conda "shell.fish" "hook" $argv | source
-end
-# <<< conda initialize <<<
 
