@@ -47,3 +47,4 @@ status --is-interactive; and begin
     source ~/.config/op/plugins.sh
 end
 
+source ~/.config/fish/conda.fish
