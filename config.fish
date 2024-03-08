@@ -29,19 +29,25 @@ status --is-interactive; and begin
         set --prepend fish_complete_path "$KITTY_INSTALLATION_DIR/shell-integration/fish/vendor_completions.d"
     end
 
+    function help
+      $argv --help 2>&1 | bathelp
+    end
+
     set -gx NVM_DIR "$HOME/.nvm"
 
     set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
-    
-    set -gx USE_GKE_GCLOUD_AUTH_PLUGIN true
-    
+    set -gx MANROFFOPT "-c"
+    set -gx BAT_THEME "Dracula"
+    set -gx XDG_CONFIG_HOME "$HOME/.config"
+    set -gx XDG_CACHE_HOME "$HOME/.cache"
+    set -gx COLORTERM "truecolor"
     set -gx TERM "xterm-256color"
     
-    set -gx JAVA_HOME "/Applications/Android Studio.app/Contents/jbr/Contents/Home"
-    set -gx ANDROID_HOME "$HOME/Library/Android/sdk"
-    set -gx NDK_HOME "$ANDROID_HOME/ndk/25.0.8775105"
-
-    set -gx SSH_AUTH_SOCK "~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+    if test -d "$HOME/Library/Group\ Containers/2BUA8C4S2C.com.1password/t"
+      set -gx SSH_AUTH_SOCK "~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+    else if test -d "$HOME/.1password"
+      set -gx SSH_AUTH_SOCK "~/.1password/agent.sock"
+    end
 
     starship init fish | source
     source ~/.config/op/plugins.sh
