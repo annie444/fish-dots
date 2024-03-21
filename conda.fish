@@ -12,12 +12,12 @@ end
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-if test -f $HOME/miniforge3/bin/conda
-    eval $HOME/miniforge3/bin/conda "shell.fish" "hook" $argv | source
+if test -f /home/annie/miniforge3/bin/conda
+    eval /home/annie/miniforge3/bin/conda "shell.fish" "hook" $argv | source
 end
 
-if test -f "$HOME/miniforge3/etc/fish/conf.d/mamba.fish"
-    source "$HOME/miniforge3/etc/fish/conf.d/mamba.fish"
+if test -f "/home/annie/miniforge3/etc/fish/conf.d/mamba.fish"
+    source "/home/annie/miniforge3/etc/fish/conf.d/mamba.fish"
 end
 # <<< conda initialize <<<
 

@@ -51,6 +51,9 @@ status --is-interactive; and begin
 
     starship init fish | source
     source ~/.config/op/plugins.sh
+
+    set -gx KNOXITE_REPOSITORY /mnt/backups
+    set -gx KNOXITE_PASSWORD (op item get --vault Private --fields password Knoxite)
 end
 
 source ~/.config/fish/conda.fish
