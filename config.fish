@@ -53,6 +53,7 @@ status --is-interactive; and begin
     source ~/.config/op/plugins.sh
 
     set -gx BUPSTASH_REPOSITORY /mnt/backups/bupstash
+    set -gx BUPSTASH_KEY $HOME/backups.key
 end
 
 source ~/.config/fish/conda.fish
