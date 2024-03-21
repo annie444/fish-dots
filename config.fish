@@ -50,7 +50,7 @@ status --is-interactive; and begin
     end
 
     starship init fish | source
-    knoxite completions fish | source
+    knoxite completion fish | source
     source ~/.config/op/plugins.sh
 
     set -gx KNOXITE_REPOSITORY /mnt/backups
