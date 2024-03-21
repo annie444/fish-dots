@@ -52,7 +52,7 @@ status --is-interactive; and begin
     starship init fish | source
     source ~/.config/op/plugins.sh
 
-    set -gx BUPSTASH_REPOSITORY /mnt/backups
+    set -gx BUPSTASH_REPOSITORY /mnt/backups/bupstash
 end
 
 source ~/.config/fish/conda.fish
