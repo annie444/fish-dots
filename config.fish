@@ -51,9 +51,8 @@ status --is-interactive; and begin
 
     starship init fish | source
     source ~/.config/op/plugins.sh
-
-    set -gx BUPSTASH_REPOSITORY /mnt/backups/bupstash
-    set -gx BUPSTASH_KEY $HOME/backups.key
+    set -gx RESTIC_REPOSITORY /mnt/backups/restic
+    set -gx RESTIC_PASSWORD (cat ~/backup.key)
 end
 
 source ~/.config/fish/conda.fish
