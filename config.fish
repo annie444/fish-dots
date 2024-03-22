@@ -53,6 +53,7 @@ status --is-interactive; and begin
     source ~/.config/op/plugins.sh
     set -gx RESTIC_REPOSITORY /mnt/backups/restic
     set -gx RESTIC_PASSWORD (cat ~/backup.key)
+    set -gx RESTIC_COMPRESSION max
 end
 
 source ~/.config/fish/conda.fish
