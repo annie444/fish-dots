@@ -42,6 +42,7 @@ status --is-interactive; and begin
     set -gx XDG_CACHE_HOME "$HOME/.cache"
     set -gx COLORTERM "truecolor"
     set -gx TERM "xterm-256color"
+    set -gx EDITOR "nvim"
     
     if test -d "$HOME/Library/Group\ Containers/2BUA8C4S2C.com.1password/t"
       set -gx SSH_AUTH_SOCK "~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock"
