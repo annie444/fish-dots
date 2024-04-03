@@ -50,6 +50,12 @@ status --is-interactive; and begin
       set -gx SSH_AUTH_SOCK "~/.1password/agent.sock"
     end
 
+    if test -d /home/linuxbrew
+      /home/linuxbrew/.linuxbrew/bin/brew shellenv fish | source
+    else if test -d /opt/homebrew
+      /opt/homebrew/bin/brew shellenv | source
+    end
+
     starship init fish | source
     source ~/.config/op/plugins.sh
     set -gx RESTIC_REPOSITORY /mnt/backups/restic
