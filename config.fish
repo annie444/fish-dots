@@ -61,6 +61,15 @@ status --is-interactive; and begin
     set -gx RESTIC_REPOSITORY /mnt/backups/restic
     set -gx RESTIC_PASSWORD (cat ~/backup.key)
     set -gx RESTIC_COMPRESSION max
+
+    # pnpm
+    if test -d "$HOME/Library"
+      set -gx PNPM_HOME "$HOME/Library/pnpm"
+      if not string match -q -- $PNPM_HOME $PATH
+        set -gx PATH "$PNPM_HOME" $PATH
+      end
+    end
+    # pnpm end
 end
 
 source ~/.config/fish/conda.fish
