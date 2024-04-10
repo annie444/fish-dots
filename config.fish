@@ -62,10 +62,7 @@ status --is-interactive; and begin
     end
 
     starship init fish | source
-    source ~/.config/fish/op.fish
-    if $op == true
-      source ~/.config/op/plugins.sh
-    end
+    source ~/.config/op/plugins.sh
 
     # pnpm
     if test -d "$HOME/Library"
