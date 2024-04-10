@@ -33,7 +33,12 @@ status --is-interactive; and begin
       $argv --help 2>&1 | bathelp
     end
 
-    set -gx NVM_DIR "$HOME/.nvm"
+    set -gx NVM_DIR "$HOME/.config/nvm"
+    if test -x "$NVIM_DIR/nvm.sh"
+        \. "$NVM_DIR/nvm.sh"
+        set --universal nvm_default_version "lts"
+        set --universal nvm_default_packages tree-sitter-cli pnpm
+    end 
 
     set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
     set -gx MANROFFOPT "-c"
