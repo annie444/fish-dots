@@ -63,9 +63,6 @@ status --is-interactive; and begin
 
     starship init fish | source
     source ~/.config/op/plugins.sh
-    set -gx RESTIC_REPOSITORY /mnt/backups/restic
-    set -gx RESTIC_PASSWORD (cat ~/backup.key)
-    set -gx RESTIC_COMPRESSION max
 
     # pnpm
     if test -d "$HOME/Library"
