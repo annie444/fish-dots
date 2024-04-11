@@ -37,7 +37,7 @@ status --is-interactive; and begin
     if test -x "$NVIM_DIR/nvm.sh"
         \. "$NVM_DIR/nvm.sh"
         set --universal nvm_default_version "lts"
-        set --universal nvm_default_packages tree-sitter-cli pnpm
+        set --universal nvm_default_packages tree-sitter-cli pnpm auto-changelog
     end 
 
     set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
