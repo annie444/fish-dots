@@ -7,9 +7,8 @@ set -U EDITOR nvim
 status --is-interactive; and begin
     # Aliases
     set -gx GPG_TTY (tty)
-    base16-dracula
-    set -g fish_greeting ""
     thefuck --alias | source
+    set -g fish_greeting ""
     alias .. 'z ..'
     alias cd 'z'
     alias :q exit
@@ -21,9 +20,11 @@ status --is-interactive; and begin
     alias find 'bfs'
     alias gd 'batdiff'
     alias bathelp 'bat --plain --language=help'
+    
     base16-dracula
+    
     set -g fish_greeting ""
-    thefuck --alias | source
+
     if set -q KITTY_INSTALLATION_DIR
         source "$KITTY_INSTALLATION_DIR/shell-integration/fish/vendor_conf.d/kitty-shell-integration.fish"
         set --prepend fish_complete_path "$KITTY_INSTALLATION_DIR/shell-integration/fish/vendor_completions.d"
@@ -66,9 +67,11 @@ status --is-interactive; and begin
 
     # pnpm
     if test -d "$HOME/Library"
-      set -gx PNPM_HOME "$HOME/Library/pnpm"
-      if not string match -q -- $PNPM_HOME $PATH
-        set -gx PATH "$PNPM_HOME" $PATH
+      if test -d "$HOME/Library/pnpm"
+        set -gx PNPM_HOME "$HOME/Library/pnpm"
+        if not string match -q -- $PNPM_HOME $PATH
+          fish_add_path "$PNPM_HOME" $PATH
+        end
       end
     end
     # pnpm end
