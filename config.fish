@@ -6,6 +6,8 @@ set -U EDITOR nvim
 
 status --is-interactive; and begin
     # Aliases
+    fish_config theme choose "Dracula Official"
+
     set -gx GPG_TTY (tty)
     thefuck --alias | source
     set -g fish_greeting ""
@@ -20,9 +22,6 @@ status --is-interactive; and begin
     alias find 'bfs'
     alias gd 'batdiff'
     alias bathelp 'bat --plain --language=help'
-    
-    base16-dracula
-    
     set -g fish_greeting ""
 
     if set -q KITTY_INSTALLATION_DIR
