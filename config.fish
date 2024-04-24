@@ -24,7 +24,11 @@ status --is-interactive; and begin
     alias find 'bfs'
     alias gd 'batdiff'
     alias bathelp 'bat --plain --language=help'
-    set -g fish_greeting ""
+    set -gx fish_greeting ""
+    set -gx fzf_preview_dir eza --all --color=always
+    set -gx fzf_preview_file bat
+    set -gx fzf_fd_opts --hidden
+    set -gx fzf_diff_highlighter delta --paging=never --width=20
 
     if set -q KITTY_INSTALLATION_DIR
         source "$KITTY_INSTALLATION_DIR/shell-integration/fish/vendor_conf.d/kitty-shell-integration.fish"
