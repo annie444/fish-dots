@@ -1,6 +1,5 @@
 set -U fish_term24bit 1
 
-fzf --fish | source
 zoxide init fish | source
 
 set -U EDITOR nvim
