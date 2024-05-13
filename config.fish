@@ -31,20 +31,29 @@ status --is-interactive; and begin
     set -gx fzf_diff_highlighter delta --paging=never --width=20
 
     if set -q KITTY_INSTALLATION_DIR
-        source "$KITTY_INSTALLATION_DIR/shell-integration/fish/vendor_conf.d/kitty-shell-integration.fish"
-        set --prepend fish_complete_path "$KITTY_INSTALLATION_DIR/shell-integration/fish/vendor_completions.d"
+      source "$KITTY_INSTALLATION_DIR/shell-integration/fish/vendor_conf.d/kitty-shell-integration.fish"
+      set --prepend fish_complete_path "$KITTY_INSTALLATION_DIR/shell-integration/fish/vendor_completions.d"
     end
 
     function help
       $argv --help 2>&1 | bathelp
     end
 
-    set -gx NVM_DIR "$HOME/.config/nvm"
-    if test -x "$NVIM_DIR/nvm.sh"
+    if test -d "$HOME/.config/nvm"
+      set -gx NVM_DIR "$HOME/.config/nvm"
+    else if test -d "$HOME/.nvm"
+      set -gx NVM_DIR "$HOME/.nvm"
+    else if test -d "$HOME/nvm"
+      set -gx NVM_DIR "$HOME/nvm"
+    end
+
+    if test -n "$NVM_DIR"
+      set --universal nvm_default_version "lts"
+      set --universal nvm_default_packages tree-sitter-cli pnpm auto-changelog
+      if test -x "$NVIM_DIR/nvm.sh"
         \. "$NVM_DIR/nvm.sh"
-        set --universal nvm_default_version "lts"
-        set --universal nvm_default_packages tree-sitter-cli pnpm auto-changelog
-    end 
+      end
+    end
 
     set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
     set -gx MANROFFOPT "-c"
