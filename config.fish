@@ -23,6 +23,7 @@ status --is-interactive; and begin
     alias find 'bfs'
     alias gd 'batdiff'
     alias bathelp 'bat --plain --language=help'
+    alias esp ". $HOME/esp/esp-idf/export.fish"
     set -gx fish_greeting ""
     set -gx fzf_preview_dir eza --all --color=always
     set -gx fzf_preview_file bat
