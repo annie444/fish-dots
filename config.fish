@@ -17,7 +17,7 @@ status --is-interactive; and begin
     alias cat 'bat'
     alias du 'dust' 
     alias g 'git'
-    alias gn 'gitnow'
+    alias gnow 'gitnow'
     alias ls 'eza --extended --bytes --links --blocksize --group --header --dereference --binary --octal-permissions --git --git-repos --long --all --all --icons --grid --classify --hyperlink --group-directories-first --time=modified --sort=extension --color=always --width=1 --time-style=long-iso'
     alias vimdiff 'nvim -d'
     alias find 'bfs'
