@@ -55,6 +55,7 @@ status --is-interactive; and begin
         set --universal nvm_default_version "lts"
         set --universal nvm_default_packages tree-sitter-cli pnpm auto-changelog
         nvm use lts
+      end
     end 
 
     set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
