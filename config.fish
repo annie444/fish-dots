@@ -52,8 +52,10 @@ status --is-interactive; and begin
       set --universal nvm_default_packages tree-sitter-cli pnpm auto-changelog
       if test -x "$NVIM_DIR/nvm.sh"
         \. "$NVM_DIR/nvm.sh"
-      end
-    end
+        set --universal nvm_default_version "lts"
+        set --universal nvm_default_packages tree-sitter-cli pnpm auto-changelog
+        nvm use lts
+    end 
 
     set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
     set -gx MANROFFOPT "-c"
@@ -84,8 +86,13 @@ status --is-interactive; and begin
       if test -d "$HOME/Library/pnpm"
         set -gx PNPM_HOME "$HOME/Library/pnpm"
         if not string match -q -- $PNPM_HOME $PATH
-          fish_add_path "$PNPM_HOME" $PATH
+          set -gx PATH "$PNPM_HOME" $PATH
         end
+      end
+    else if test -d "$HOME/.local/share/pnpm"
+      set -gx PNPM_HOME "$HOME/.local/share/pnpm"
+      if not string match -q -- $PNPM_HOME $PATH
+        set -gx PATH "$PNPM_HOME" $PATH
       end
     end
     # pnpm end
