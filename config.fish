@@ -24,6 +24,7 @@ status --is-interactive; and begin
     alias gd 'batdiff'
     alias bathelp 'bat --plain --language=help'
     alias esp ". $HOME/esp/esp-idf/export.fish"
+    alias note "nvim -c ':ObsidianToday<CR>'"
     if test "$(uname)" = "Darwin"
       alias apptainer "limactl shell apptainer"
     end
