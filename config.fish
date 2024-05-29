@@ -62,6 +62,12 @@ status --is-interactive; and begin
       end
     end 
 
+    if test -d "/usr/local/texlive/2024"
+      set -gx MANPATH "/usr/local/texlive/2024/texmf-dist/doc/man" $MANPATH
+      set -gx INFOPATH "/usr/local/texlive/2024/texmf-dist/doc/info" $INFOPATH
+      set -gx PATH "/usr/local/texlive/2024/bin/x86_64-linux" $PATH
+    end
+
     set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
     set -gx MANROFFOPT "-c"
     set -gx BAT_THEME "Dracula"
