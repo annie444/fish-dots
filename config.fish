@@ -2,6 +2,8 @@ set -U fish_term24bit 1
 
 zoxide init fish | source
 
+direnv hook fish | source
+
 set -U EDITOR nvim
 
 status --is-interactive; and begin
