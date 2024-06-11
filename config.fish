@@ -91,6 +91,10 @@ status --is-interactive; and begin
       /opt/homebrew/bin/brew shellenv | source
     end
 
+    if test -d "$HOME/.asdf"
+      source ~/.asdf/asdf.fish
+    end
+
     starship init fish | source
     source ~/.config/op/plugins.sh
 
