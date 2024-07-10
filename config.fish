@@ -13,6 +13,7 @@ status --is-interactive; and begin
     set -gx GPG_TTY (tty)
     thefuck --alias | source
     set -g fish_greeting ""
+
     alias .. 'z ..'
     alias cd 'z'
     alias :q exit
@@ -27,6 +28,8 @@ status --is-interactive; and begin
     alias bathelp 'bat --plain --language=help'
     alias esp ". $HOME/esp/esp-idf/export.fish"
     alias note "nvim -c ':ObsidianToday<CR>'"
+    alias ssh "kitten ssh"
+
     if test "$(uname)" = "Darwin"
       alias apptainer "limactl shell apptainer"
     end
