@@ -53,6 +53,10 @@ status --is-interactive; and begin
       set --prepend fish_complete_path "$KITTY_INSTALLATION_DIR/shell-integration/fish/vendor_completions.d"
     end
 
+    if contains $HOME/.local/share/rmtrash $PATH
+      set -Xg PATH $HOME/.local/share/rmtrash $PATH
+    end
+
     function help
       $argv --help 2>&1 | bathelp
     end
