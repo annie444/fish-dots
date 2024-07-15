@@ -45,6 +45,9 @@ status --is-interactive; and begin
       nvim $argv
     end
     function rm -w rmtrash -d "alias rm rmtrash"
+      for arg in $argv
+        echo $arg
+      end
       if argparse -i 'r/recursive' -- $argv
         rmdirtrash $argv
       else
@@ -108,7 +111,7 @@ status --is-interactive; and begin
     end
 
     if contains $HOME/.local/share/rmtrash $PATH
-      set -Xg PATH $HOME/.local/share/rmtrash $PATH
+      set -gx PATH $HOME/.local/share/rmtrash $PATH
     end
 
     function help
