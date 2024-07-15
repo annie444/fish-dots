@@ -14,30 +14,87 @@ status --is-interactive; and begin
     thefuck --alias | source
     set -g fish_greeting ""
 
-    alias .. 'z ..'
-    alias cd 'z'
-    alias :q exit
-    alias cat 'bat'
-    alias du 'dust' 
-    alias g 'git'
-    alias gnow 'gitnow'
-    alias ls 'eza -1GghmMoXr --color=always --icons=always -s created --group-directories-first --time-style long-iso --git --git-repos --hyperlink --show-symlinks -w 10'
-    alias la 'eza -1GghmMoXrla --color=always --icons=always -s created --group-directories-first --time-style long-iso --git --git-repos --hyperlink --show-symlinks -w 100'
-    alias vim 'nvim'
-    alias vi 'nvim'
-    alias rm 'echo "This is not the command you are looking for."; false'
-    alias tp "trash-put"
-    alias te "trash-empty"
-    alias tl "trash-list"
-    alias tre "trash-restore"
-    alias trm "trash-rm"
-    alias vimdiff 'nvim -d'
-    alias find 'bfs'
-    alias gd 'batdiff'
-    alias bathelp 'bat --plain --language=help'
+    function cd -w z -d "alias cd z"
+      z $argv
+    end
+    function .. -d "alias .. 'z ..'"
+      z ..
+    end
+    function :q -w exit -d "alias :q exit"
+      exit
+    end
+    function cat -w bat -d "alias cat bat"
+      bat $argv
+    end
+    function du -w dust -d "alias du dust"
+      dust $argv
+    end
+    function g -w git -d 'alias g git'
+      git $argv
+    end
+    function ls -w eza -d "alias ls 'eza -1GghmMoXr --color=always --icons=always -s created --group-directories-first --time-style long-iso --git --git-repos --hyperlink --show-symlinks -w 10'"
+      eza -1GghmMoXr --color=always --icons=always -s created --group-directories-first --time-style long-iso --git --git-repos --hyperlink --show-symlinks -w 10 $argv
+    end
+    function la -w eza -d "alias la 'eza -1GghmMoXrla --color=always --icons=always -s created --group-directories-first --time-style long-iso --git --git-repos --hyperlink --show-symlinks -w 100'"
+      eza -1GghmMoXrla --color=always --icons=always -s created --group-directories-first --time-style long-iso --git --git-repos --hyperlink --show-symlinks -w 100 $argv
+    end
+    function vim -w nvim -d "alias vim nvim"
+      nvim $argv
+    end
+    function vi -w nvim -d "alias vi nvim"
+      nvim $argv
+    end
+    function rm -w rmtrash -d "alias rm rmtrash"
+      if test (contains "-r" $argv) -o (contains "-rf" $argv)
+        rmdirtrash $argv
+      else
+        rmtrash $argv
+      end
+    end
+    function rmrf -w rmdirtrash -d "alias rmrf rmdirtrash"
+      rmdirtrash $argv
+    end
+    function rmdir -w rmdirtrash -d "alias rmdir rmdirtrash"
+      rmdirtrash $argv
+    end
+    function tp -w trash-put -d "alias tp trash-put"
+      trash-put $argv
+    end
+    function te -w trash-empty -d "alias te trash-empty"
+      trash-empty $argv
+    end
+    function tl -w trash-list -d "alias tl trash-list"
+      trash-list $argv
+    end
+    function tre -w trash-restore -d "alias tre trash-restore"
+      trash-restore $argv
+    end
+    function trm -w trash-rm -d "alias trm trash-rm"
+      trash-rm $argv
+    end
+    function vimdiff -w nvim -d "alias vimdiff nvim -d"
+      nvim -d $argv
+    end
+    function diff -w batdiff -d "alias diff batdiff"
+      nvim -d $argv
+    end
+    function find -w bfs -d "alias find bfs"
+      bfs $argv
+    end
+    function gd -w batdiff -d "alias gd batdiff"
+      batdiff $argv
+    end
+    function bathelp -w bat -d "alias bathelp 'bat --plain --language=help'"
+      bat --plain --language=help $argv
+    end
+    function ssh -d "alias ssh kitten ssh"
+      kitten ssh $argv
+    end
+    function note -w nvim -d "alias note 'nvim -c ':ObsidianToday<CR>'"
+      nvim -c ':ObsidianToday<CR>' $argv
+    end
     alias esp ". $HOME/esp/esp-idf/export.fish"
-    alias note "nvim -c ':ObsidianToday<CR>'"
-    alias ssh "kitten ssh"
+    
 
     if test "$(uname)" = "Darwin"
       alias apptainer "limactl shell apptainer"
