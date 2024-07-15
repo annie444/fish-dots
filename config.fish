@@ -44,12 +44,6 @@ status --is-interactive; and begin
     function vi -w nvim -d "alias vi nvim"
       nvim $argv
     end
-    function rm -w rmtrash -d "alias rm rmtrash"
-      rmtrash $argv
-    end
-    function rmdir -w rmdirtrash -d "alias rmdir rmdirtrash"
-      rmdirtrash $argv
-    end
     function tp -w trash-put -d "alias tp trash-put"
       trash-put $argv
     end
