@@ -45,14 +45,11 @@ status --is-interactive; and begin
       nvim $argv
     end
     function rm -w rmtrash -d "alias rm rmtrash"
-      if test (contains "-r" $argv) -o (contains "-rf" $argv)
+      if argparse -i 'r/recursive' -- $argv
         rmdirtrash $argv
       else
         rmtrash $argv
       end
-    end
-    function rmrf -w rmdirtrash -d "alias rmrf rmdirtrash"
-      rmdirtrash $argv
     end
     function rmdir -w rmdirtrash -d "alias rmdir rmdirtrash"
       rmdirtrash $argv
