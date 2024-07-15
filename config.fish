@@ -21,7 +21,16 @@ status --is-interactive; and begin
     alias du 'dust' 
     alias g 'git'
     alias gnow 'gitnow'
-    alias ls 'eza --extended --bytes --links --blocksize --group --header --dereference --binary --octal-permissions --git --git-repos --long --all --all --icons --grid --classify --hyperlink --group-directories-first --time=modified --sort=extension --color=always --width=1 --time-style=long-iso'
+    alias ls 'eza -1GghmMoXr --color=always --icons=always -s created --group-directories-first --time-style long-iso --git --git-repos --hyperlink --show-symlinks -w 10'
+    alias la 'eza -1GghmMoXrla --color=always --icons=always -s created --group-directories-first --time-style long-iso --git --git-repos --hyperlink --show-symlinks -w 100'
+    alias vim 'nvim'
+    alias vi 'nvim'
+    alias rm 'echo "This is not the command you are looking for."; false'
+    alias tp "trash-put"
+    alias te "trash-empty"
+    alias tl "trash-list"
+    alias tre "trash-restore"
+    alias trm "trash-rm"
     alias vimdiff 'nvim -d'
     alias find 'bfs'
     alias gd 'batdiff'
