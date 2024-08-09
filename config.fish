@@ -20,10 +20,7 @@ status --is-interactive; and begin
     abbr -a vim nvim
     abbr -a vi nvim
     abbr -a diff batdiff
-    abbr -a vimdiff "nvim -d"
     abbr -a gd batdiff
-    abbr -a bathelp "bat --plain --language=help"
-    abbr -a note "nvim -c ':ObsidianToday<CR>'"
     abbr -a ":q" exit
     abbr -a k kubectl
     abbr -a cat bat
@@ -41,6 +38,9 @@ status --is-interactive; and begin
     alias la 'eza -1GghmMoXrla --color=always --icons=always -s created --group-directories-first --time-style long-iso --git --git-repos --hyperlink --show-symlinks -w 100'
     alias ssh kitten ssh
     alias esp ". $HOME/esp/esp-idf/export.fish"
+    alias note "nvim -c ':ObsidianToday<CR>'"
+    alias vimdiff "nvim -d"
+    alias bathelp "bat --plain --language=help"
 
     if test "$(uname)" = "Darwin"
       alias apptainer "limactl shell apptainer"
