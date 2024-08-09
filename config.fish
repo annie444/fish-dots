@@ -47,6 +47,9 @@ status --is-interactive; and begin
     end
     set -gx fish_greeting ""
 
+    # Set up fzf key bindings
+    fzf --fish | source
+
     # FZF Config
     # from https://github.com/PatrickF1/fzf.fish#change-fzf-options-for-a-specific-command
     set -gx fzf_preview_dir_cmd 'tre -C {} | head -n 200'
