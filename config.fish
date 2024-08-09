@@ -32,11 +32,11 @@ status --is-interactive; and begin
     abbr -a grep batgrep
     abbr -a watch batwatch
 
-    alias cd z
-    alias .. 'z ..'
+    alias cd 'z'
+    alias '..' 'z ..'
     alias ls 'eza -1GghmMoXr --color=always --icons=always -s created --group-directories-first --time-style long-iso --git --git-repos --hyperlink --show-symlinks -w 10'
     alias la 'eza -1GghmMoXrla --color=always --icons=always -s created --group-directories-first --time-style long-iso --git --git-repos --hyperlink --show-symlinks -w 100'
-    alias ssh kitten ssh
+    alias ssh 'kitten ssh'
     alias esp ". $HOME/esp/esp-idf/export.fish"
     alias note "nvim -c ':ObsidianToday<CR>'"
     alias vimdiff "nvim -d"
