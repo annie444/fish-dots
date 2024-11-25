@@ -42,6 +42,10 @@ status --is-interactive; and begin
     alias vimdiff "nvim -d"
     alias bathelp "bat --plain --language=help"
 
+    if test -d /opt/homebrew/bin
+      alias git '/opt/homebrew/bin/git'
+    end
+
     if test "$(uname)" = "Darwin"
       alias apptainer "limactl shell apptainer"
     end
