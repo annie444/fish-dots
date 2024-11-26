@@ -116,6 +116,8 @@ status --is-interactive; and begin
 
     if test -d "$HOME/.asdf"
       source ~/.asdf/asdf.fish
+    else if test -e "/opt/homebrew/opt/asdf/libexec/asdf.fish"
+      source /opt/homebrew/opt/asdf/libexec/asdf.fish
     end
 
     starship init fish | source
