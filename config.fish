@@ -114,7 +114,7 @@ status --is-interactive; and begin
     set -gx BATPIPE "color"
     set -gx BATDIFF_USE_DELTA true
 
-    if test -d "$HOME/.asdf"
+    if test -e "$HOME/.asdf/asdf.fish"
       source ~/.asdf/asdf.fish
     else if test -e "/opt/homebrew/opt/asdf/libexec/asdf.fish"
       source /opt/homebrew/opt/asdf/libexec/asdf.fish
