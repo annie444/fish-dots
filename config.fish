@@ -46,6 +46,10 @@ status --is-interactive; and begin
       alias git '/opt/homebrew/bin/git'
     end
 
+    if test -d /opt/homebrew; or test -d /home/linuxbrew/.linuxbrew
+      set -Ux HOMEBREW_AUTO_UPDATE_SECS 86400
+    end
+
     if test "$(uname)" = "Darwin"
       alias apptainer "limactl shell apptainer"
     end
