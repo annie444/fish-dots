@@ -6,6 +6,10 @@ direnv hook fish | source
 
 set -U EDITOR nvim
 
+if test -d $HOME/.config/jenkins
+  source $HOME/.config/jenkins/creds.fish
+end
+
 status --is-interactive; and begin
     # Aliases
     fish_config theme choose "Dracula Official"
