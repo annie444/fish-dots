@@ -71,7 +71,7 @@ status --is-interactive; and begin
 
     # from https://github.com/junegunn/fzf?tab=readme-ov-file#environment-variables
     set -gx FZF_DEFAULT_COMMAND 'bfs -type f'
-    set -gx FZF_DEFAULT_OPTS '--height 40% --layout=reverse --border --prompt="> " --preview-window=right:60%:wrap --preview="{}"'
+    set -gx FZF_DEFAULT_OPTS '--height 40% --layout=reverse --border --prompt="> " --preview-window=right:60%:wrap --preview="bat --color=always --style=numbers --line-range=:500s {}"'
     set -gx FZF_COMPLETION_TRIGGER '**'
     set -gx FZF_COMPLETION_OPTS '--border --info=inline'
     set -gx FZF_COMPLETION_PATH_OPTS '--walker file,dir,follow,hidden'
@@ -179,3 +179,7 @@ status --is-interactive; and begin
 end
 
 source ~/.config/fish/conda.fish
+
+if test -f $HOME/.gcloud/path.fish.inc
+  source $HOME/.gcloud/path.fish.inc
+end
