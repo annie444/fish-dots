@@ -1,13 +1,16 @@
 set -U fish_term24bit 1
 
 zoxide init fish | source
-
 direnv hook fish | source
 
 set -U EDITOR nvim
 
 if test -d $HOME/.config/jenkins
   source $HOME/.config/jenkins/creds.fish
+end
+
+if test -d $HOME/.asdf
+  set -Ux CLOUDSDK_PYTHON $HOME/.asdf/installs/python/3.13.1t/bin/python
 end
 
 status --is-interactive; and begin
@@ -46,10 +49,6 @@ status --is-interactive; and begin
     alias vimdiff "nvim -d"
     alias bathelp "bat --plain --language=help"
 
-    if test -d /opt/homebrew/bin
-      alias git '/opt/homebrew/bin/git'
-    end
-
     if test -d /opt/homebrew; or test -d /home/linuxbrew/.linuxbrew
       set -Ux HOMEBREW_AUTO_UPDATE_SECS 86400
     end
@@ -64,15 +63,43 @@ status --is-interactive; and begin
 
     # FZF Config
     # from https://github.com/PatrickF1/fzf.fish#change-fzf-options-for-a-specific-command
-    set -gx fzf_preview_dir_cmd 'tre -C {} | head -n 200'
+    set -gx fzf_preview_dir_cmd 'tree -C {} | head -n 200'
     set -gx fzf_preview_file_cmd 'bat --color=always --style=numbers --line-range=:500s {}'
     set -gx fzf_diff_highlighter 'batdiff --paging=never --width=20'
     set -gx fzf_history_time_format "%Y-%m-%d %H:%M:%S"
-    set -gx fzf_fd_opts --hidden
+    set -gx fzf_fd_opts ''
 
     # from https://github.com/junegunn/fzf?tab=readme-ov-file#environment-variables
-    set -gx FZF_DEFAULT_COMMAND 'bfs . -type f -name'
-    
+    set -gx FZF_DEFAULT_COMMAND 'bfs -type f'
+    set -gx FZF_DEFAULT_OPTS '--height 40% --layout=reverse --border --prompt="> " --preview-window=right:60%:wrap --preview="{}"'
+    set -gx FZF_COMPLETION_TRIGGER '**'
+    set -gx FZF_COMPLETION_OPTS '--border --info=inline'
+    set -gx FZF_COMPLETION_PATH_OPTS '--walker file,dir,follow,hidden'
+    set -gx FZF_COMPLETION_DIR_OPTS '--walker dir,hidden'
+
+    function _fzf_comprun
+      set -l command $argv[1]
+      set -e $argv[1]
+      switch $command
+        case cd
+          fzf --preview 'tree -C {} | head -200' "$argv"
+        case 'export|unset'
+          fzf --preview "eval 'echo \$'{}" "$argv"
+        case ssh
+          fzf --preview 'dig {}' "$argv"
+        case '*'
+          fzf --preview 'bat -n --color=always {}' "$argv"
+      end
+    end
+
+    function _fzf_compgen_path
+      bfs -L . -exclude -path "*.git*" -name $argv[1]
+    end
+
+    # Use fd to generate the list for directory completion
+    function _fzf_compgen_dir
+      bfs -L . -type d -exclude -path "*.git*" $argv[1]
+    end
 
     if set -q KITTY_INSTALLATION_DIR
       source "$KITTY_INSTALLATION_DIR/shell-integration/fish/vendor_conf.d/kitty-shell-integration.fish"
