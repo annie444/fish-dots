@@ -106,6 +106,22 @@ status --is-interactive; and begin
       set --prepend fish_complete_path "$KITTY_INSTALLATION_DIR/shell-integration/fish/vendor_completions.d"
     end
 
+    if ! contains "/opt/homebrew/opt/coreutils/bin" $PATH
+      set -Ua PATH "/opt/homebrew/opt/coreutils/bin"
+    end
+
+    if ! contains "/opt/homebrew/opt/coreutils/libexec/gnubin" $PATH
+      set -Ua PATH "/opt/homebrew/opt/coreutils/libexec/gnubin"
+    end
+
+    if test -d (brew --prefix)"/share/fish/completions"
+      set -p fish_complete_path (brew --prefix)/share/fish/completions
+    end
+
+    if test -d (brew --prefix)"/share/fish/vendor_completions.d"
+      set -p fish_complete_path (brew --prefix)/share/fish/vendor_completions.d
+    end
+
     if contains $HOME/.local/share/rmtrash $PATH
       set -gx PATH $HOME/.local/share/rmtrash $PATH
     end
