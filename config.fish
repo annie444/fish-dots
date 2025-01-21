@@ -114,11 +114,11 @@ status --is-interactive; and begin
       set -Ua PATH "/opt/homebrew/opt/coreutils/libexec/gnubin"
     end
 
-    if test -d (brew --prefix)"/share/fish/completions"
+    if test -d "/opt/homebrew/share/fish/completions"
       set -p fish_complete_path (brew --prefix)/share/fish/completions
     end
 
-    if test -d (brew --prefix)"/share/fish/vendor_completions.d"
+    if test -d "/opt/homebrew/share/fish/vendor_completions.d"
       set -p fish_complete_path (brew --prefix)/share/fish/vendor_completions.d
     end
 
