@@ -77,6 +77,11 @@ status --is-interactive; and begin
     set -gx FZF_COMPLETION_PATH_OPTS '--walker file,dir,follow,hidden'
     set -gx FZF_COMPLETION_DIR_OPTS '--walker dir,hidden'
 
+    # UV options
+    set -gx UV_PYTHON_PREFERENCE "only-managed"
+    set -gx UV_LINK_MODE "symlink"
+    set -gx UV_PRERELEASE "if-necessary-or-explicit"
+
     function _fzf_comprun
       set -l command $argv[1]
       set -e $argv[1]
