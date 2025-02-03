@@ -52,6 +52,7 @@ status --is-interactive; and begin
     alias note "nvim -c ':ObsidianToday<CR>'"
     alias vimdiff "nvim -d"
     alias bathelp "bat --plain --language=help"
+    alias activate "source $(pwd)/.venv/bin/activate.fish"
     function help
       $argv --help 2>&1 | bathelp
     end
