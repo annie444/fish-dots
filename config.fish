@@ -8,6 +8,7 @@ set -Ux XDG_CACHE_HOME "$HOME/.cache"
 set -Ux COLORTERM "truecolor"
 set -Ux TERM "xterm-256color"
 set -Ux PAGER "less"
+set -gx --prepend ASDF_DATA_DIR "$HOME/.asdf"
 
 # Local environment config
 direnv hook fish | source
@@ -136,17 +137,12 @@ if test -f $HOME/.gcloud/path.fish.inc
 end
 
 # Homebrew paths
-if test -d "/opt/homebrew/opt/coreutils/bin" 
-  fish_add_path "/opt/homebrew/opt/coreutils/bin"
-  fish_add_path "/opt/homebrew/opt/coreutils/libexec/gnubin"
+set _coreutils_path "/opt/homebrew/opt/coreutils/bin"
+if test -d $_coreutils_path; and not contains $_coreutils_path $PATH
+  set -gx --prepend PATH $_coreutils_path
+  set -gx --prepend PATH  "/opt/homebrew/opt/coreutils/libexec/gnubin"
 end
-
-# ASDF paths
-if test -e "$HOME/.asdf/asdf.fish"
-  source ~/.asdf/asdf.fish
-else if test -e "/opt/homebrew/opt/asdf/libexec/asdf.fish"
-  source /opt/homebrew/opt/asdf/libexec/asdf.fish
-end
+set --erase _coreutils_path
 
 # UV options
 set -Ux UV_PYTHON_PREFERENCE "only-managed"
@@ -158,5 +154,23 @@ if test "$(uname)" = "Darwin"
   alias apptainer "limactl shell apptainer"
 end
 
+# ASDF configuration code
+if test -z $ASDF_DATA_DIR
+    set _asdf_shims "$HOME/.asdf/shims"
+else
+    set _asdf_shims "$ASDF_DATA_DIR/shims"
+end
+
+# Do not use fish_add_path (added in Fish 3.2) because it
+# potentially changes the order of items in PATH
+if not contains $_asdf_shims $PATH
+    set -gx --prepend PATH $_asdf_shims
+end
+set --erase _asdf_shims
+
 # Add local bin to path
-fish_add_path $HOME/.local/bin
+set _local_bin_path "$HOME/.local/bin"
+if not contains $_local_bin_path $PATH
+  set -gx --prepend PATH  $_local_bin_path
+end
+set --erase _local_bin_path
