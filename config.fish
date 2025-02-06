@@ -2,13 +2,13 @@
 
 # Environment Config
 set -U fish_term24bit 1
-set -Ux EDITOR nvim
-set -Ux XDG_CONFIG_HOME "$HOME/.config"
-set -Ux XDG_CACHE_HOME "$HOME/.cache"
-set -Ux COLORTERM "truecolor"
-set -Ux TERM "xterm-256color"
-set -Ux PAGER "less"
-set -gx --prepend ASDF_DATA_DIR "$HOME/.asdf"
+set -gx EDITOR nvim
+set -gx XDG_CONFIG_HOME "$HOME/.config"
+set -gx XDG_CACHE_HOME "$HOME/.cache"
+set -gx COLORTERM "truecolor"
+set -gx TERM "xterm-256color"
+set -gx PAGER "less"
+set -gx ASDF_DATA_DIR "$HOME/.asdf"
 
 # Local environment config
 direnv hook fish | source
@@ -185,3 +185,12 @@ if not contains $_local_bin_path $PATH
   set -gx --prepend PATH  $_local_bin_path
 end
 set --erase _local_bin_path
+
+# Environment Config
+set -U fish_term24bit 1
+set -gx EDITOR nvim
+set -gx XDG_CONFIG_HOME "$HOME/.config"
+set -gx XDG_CACHE_HOME "$HOME/.cache"
+set -gx COLORTERM "truecolor"
+set -gx TERM "xterm-256color"
+set -gx PAGER "less"
