@@ -24,7 +24,7 @@ if not pgrep -x -u "$USER" gpg-agent &> /dev/null
 end
 
 # Set GPG TTY as stated in 'man gpg-agent'
-set -Ux GPG_TTY=$(tty)
+set -Ux GPG_TTY $(tty)
 
 # Refresh gpg-agent tty in case user switches into an X session
 gpg-connect-agent updatestartuptty /bye > /dev/null
