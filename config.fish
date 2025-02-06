@@ -18,11 +18,21 @@ if test -d $HOME/.asdf
   set -Ux CLOUDSDK_PYTHON $HOME/.asdf/installs/python/3.13.1t/bin/python
 end
 
+# GPG Config
+if not pgrep -x -u "$USER" gpg-agent &> /dev/null
+  gpg-connect-agent /bye &> /dev/null
+end
+
+# Set GPG TTY as stated in 'man gpg-agent'
+set -Ux GPG_TTY=$(tty)
+
+# Refresh gpg-agent tty in case user switches into an X session
+gpg-connect-agent updatestartuptty /bye > /dev/null
+
 status --is-interactive; and begin
     # Fish Config
     fish_config theme choose "Dracula Official"
     set -gx fish_greeting ""
-    set -gx GPG_TTY (tty)
 
     # Plugins
     zoxide init fish | source
