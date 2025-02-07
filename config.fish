@@ -1,7 +1,7 @@
 
 
 # Environment Config
-set -U fish_term24bit 1
+set -gx fish_term24bit 1
 set -gx EDITOR nvim
 set -gx XDG_CONFIG_HOME "$HOME/.config"
 set -gx XDG_CACHE_HOME "$HOME/.cache"
@@ -15,7 +15,7 @@ direnv hook fish | source
 
 # CI/CD Config
 if test -d $HOME/.asdf
-  set -Ux CLOUDSDK_PYTHON $HOME/.asdf/installs/python/3.13.1t/bin/python
+  set -gx CLOUDSDK_PYTHON $HOME/.asdf/installs/python/3.13.1t/bin/python
 end
 
 # GPG Config
@@ -24,7 +24,7 @@ if not pgrep -x -u "$USER" gpg-agent &> /dev/null
 end
 
 # Set GPG TTY as stated in 'man gpg-agent'
-set -Ux GPG_TTY $(tty)
+set -gx GPG_TTY $(tty)
 
 # Refresh gpg-agent tty in case user switches into an X session
 gpg-connect-agent updatestartuptty /bye > /dev/null
@@ -160,9 +160,9 @@ end
 set --erase _coreutils_path
 
 # UV options
-set -Ux UV_PYTHON_PREFERENCE "only-managed"
-set -Ux UV_LINK_MODE "symlink"
-set -Ux UV_PRERELEASE "if-necessary-or-explicit"
+set -gx UV_PYTHON_PREFERENCE "only-managed"
+set -gx UV_LINK_MODE "symlink"
+set -gx UV_PRERELEASE "if-necessary-or-explicit"
 
 # Override apptainer for macOS
 if test "$(uname)" = "Darwin"
@@ -170,6 +170,7 @@ if test "$(uname)" = "Darwin"
 end
 
 # ASDF configuration code
+set -gx ASDF_DATA_DIR "$HOME/.asdf"
 set _asdf_shims "$ASDF_DATA_DIR/shims"
 
 # Do not use fish_add_path (added in Fish 3.2) because it
@@ -187,7 +188,7 @@ end
 set --erase _local_bin_path
 
 # Environment Config
-set -U fish_term24bit 1
+set -g fish_term24bit 1
 set -gx EDITOR nvim
 set -gx XDG_CONFIG_HOME "$HOME/.config"
 set -gx XDG_CACHE_HOME "$HOME/.cache"
