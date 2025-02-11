@@ -24,7 +24,7 @@ if not pgrep -x -u "$USER" gpg-agent &> /dev/null
 end
 
 # Set GPG TTY as stated in 'man gpg-agent'
-set -gx GPG_TTY $(tty)
+set -gx GPG_TTY (tty)
 
 # Refresh gpg-agent tty in case user switches into an X session
 gpg-connect-agent updatestartuptty /bye > /dev/null
@@ -165,7 +165,7 @@ set -gx UV_LINK_MODE "symlink"
 set -gx UV_PRERELEASE "if-necessary-or-explicit"
 
 # Override apptainer for macOS
-if test "$(uname)" = "Darwin"
+if test (uname) = "Darwin"
   alias apptainer "limactl shell apptainer"
 end
 
