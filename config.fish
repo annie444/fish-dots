@@ -1,5 +1,3 @@
-
-
 # Environment Config
 set -gx fish_term24bit 1
 set -gx EDITOR nvim
@@ -10,23 +8,35 @@ set -gx TERM "xterm-256color"
 set -gx PAGER "less"
 set -gx ASDF_DATA_DIR "$HOME/.asdf"
 
-# ASDF configuration code
-set -gx ASDF_DATA_DIR "$HOME/.asdf"
-set _asdf_shims "$ASDF_DATA_DIR/shims"
-
-# Do not use fish_add_path (added in Fish 3.2) because it
-# potentially changes the order of items in PATH
-if not contains $_asdf_shims $PATH
-    set -gx --prepend PATH $_asdf_shims
+function add_path
+  set -l path $argv
+  if not contains $path $PATH
+    set -gx --prepend PATH $path
+  end
 end
+
+# Homebrew paths
+set _coreutils_path "/opt/homebrew/opt/coreutils/bin"
+if test -d $_coreutils_path
+  add_path $_coreutils_path
+  add_path  "/opt/homebrew/opt/coreutils/libexec/gnubin"
+end
+set --erase _coreutils_path
+
+# ASDF configuration code
+set _asdf_shims "$ASDF_DATA_DIR/shims"
+add_path $_asdf_shims
 set --erase _asdf_shims
 
 # Add local bin to path
 set _local_bin_path "$HOME/.local/bin"
-if not contains $_local_bin_path $PATH
-  set -gx --prepend PATH  $_local_bin_path
-end
+add_path $_local_bin_path
 set --erase _local_bin_path
+
+# Add cargo to path
+set _cargo_bin_path "$HOME/.cargo/bin"
+add_path $_cargo_bin_path
+set --erase _cargo_bin_path
 
 # Local environment config
 direnv hook fish | source
@@ -163,14 +173,6 @@ end
 if test -f $HOME/.gcloud/path.fish.inc
   source $HOME/.gcloud/path.fish.inc
 end
-
-# Homebrew paths
-set _coreutils_path "/opt/homebrew/opt/coreutils/bin"
-if test -d $_coreutils_path; and not contains $_coreutils_path $PATH
-  set -gx --prepend PATH $_coreutils_path
-  set -gx --prepend PATH  "/opt/homebrew/opt/coreutils/libexec/gnubin"
-end
-set --erase _coreutils_path
 
 # UV options
 set -gx UV_PYTHON_PREFERENCE "only-managed"
