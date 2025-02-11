@@ -10,13 +10,26 @@ set -gx TERM "xterm-256color"
 set -gx PAGER "less"
 set -gx ASDF_DATA_DIR "$HOME/.asdf"
 
+# ASDF configuration code
+set -gx ASDF_DATA_DIR "$HOME/.asdf"
+set _asdf_shims "$ASDF_DATA_DIR/shims"
+
+# Do not use fish_add_path (added in Fish 3.2) because it
+# potentially changes the order of items in PATH
+if not contains $_asdf_shims $PATH
+    set -gx --prepend PATH $_asdf_shims
+end
+set --erase _asdf_shims
+
+# Add local bin to path
+set _local_bin_path "$HOME/.local/bin"
+if not contains $_local_bin_path $PATH
+  set -gx --prepend PATH  $_local_bin_path
+end
+set --erase _local_bin_path
+
 # Local environment config
 direnv hook fish | source
-
-# CI/CD Config
-if test -d $HOME/.asdf
-  set -gx CLOUDSDK_PYTHON $HOME/.asdf/installs/python/3.13.1t/bin/python
-end
 
 # GPG Config
 if not pgrep -x -u "$USER" gpg-agent &> /dev/null
@@ -168,24 +181,6 @@ set -gx UV_PRERELEASE "if-necessary-or-explicit"
 if test (uname) = "Darwin"
   alias apptainer "limactl shell apptainer"
 end
-
-# ASDF configuration code
-set -gx ASDF_DATA_DIR "$HOME/.asdf"
-set _asdf_shims "$ASDF_DATA_DIR/shims"
-
-# Do not use fish_add_path (added in Fish 3.2) because it
-# potentially changes the order of items in PATH
-if not contains $_asdf_shims $PATH
-    set -gx --prepend PATH $_asdf_shims
-end
-set --erase _asdf_shims
-
-# Add local bin to path
-set _local_bin_path "$HOME/.local/bin"
-if not contains $_local_bin_path $PATH
-  set -gx --prepend PATH  $_local_bin_path
-end
-set --erase _local_bin_path
 
 # Environment Config
 set -g fish_term24bit 1
