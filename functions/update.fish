@@ -1,5 +1,5 @@
 function update -a cmd -d "Update various tools"
-    set -gx PWD (pwd)
+    set -gx _starting_dir (pwd)
     if test (count $argv) -eq 2
         set -g flag $argv[2]
     end
@@ -28,8 +28,8 @@ function update -a cmd -d "Update various tools"
             echo "dotfiles in the `~/.dotfiles' directory then update the chezmoi repo." >&2
             return 1
     end
-    cd $PWD
-    set --erase PWD
+    cd $_starting_dir
+    set --erase _starting_dir
     set --erase flag
     return $status
 end
@@ -38,13 +38,13 @@ function _update_chezmoi -d "Update chezmoi"
     if test (count $argv) -eq 1
         set -g flag $argv[1]
     end
-    if test $flag = --help; or test $flag = -h
+    if test $flag = "--help"; or test $flag = "-h"
         echo "Updates chezmoi with `chezmoi update'." >&2
         return 1
     end
     chezmoi update --recursive --recurse-submodules
-    cd $PWD
-    set --erase PWD
+    cd $_starting_dir
+    set --erase _starting_dir
     set --erase flag
     return $status
 end
@@ -53,7 +53,7 @@ function _update_asdf -d "Update asdf"
     if test (count $argv) -eq 1
         set -g flag $argv[1]
     end
-    if test $flag = --help; or test $flag = -h
+    if test $flag = "--help"; or test $flag = "-h"
         echo "Updates asdf plugins with `asdf plugin update --all'." >&2
         echo "Also updates packages that are out of date in `~/.tool-versions'." >&2
         return 1
@@ -64,8 +64,8 @@ function _update_asdf -d "Update asdf"
         asdf install $plugin latest
         asdf set $plugin latest
     end
-    cd $PWD
-    set --erase PWD
+    cd $_starting_dir
+    set --erase _starting_dir
     set --erase flag
     return $status
 end
@@ -81,7 +81,7 @@ function _update_neovim -d "Update neovim"
         return 1
     end
     begin
-        set -f PWD (pwd)
+        set -f _local_starting_dir (pwd)
         set -f NOW (date "+%Y-%m-%d %H:%M:%S")
         cd ~/.dotfiles/nvim-dots
         git add -A
@@ -93,11 +93,11 @@ function _update_neovim -d "Update neovim"
         git add -A
         git commit -m "[$NOW] (update neovim) Pulling changes from nvim-dots"
         git push
-        cd $PWD
+        cd $_local_starting_dir
     end
     _update_chezmoi
-    cd $PWD
-    set --erase PWD
+    cd $_starting_dir
+    set --erase _starting_dir
     set --erase NOW
     set --erase flag
     return $status
@@ -114,7 +114,7 @@ function _update_fish -d "Update fish"
         return 1
     end
     begin
-        set -f PWD (pwd)
+        set -f _local_starting_dir (pwd)
         set -f NOW (date "+%Y-%m-%d %H:%M:%S")
         cd ~/.dotfiles/fish-dots
         git add -A
@@ -126,11 +126,11 @@ function _update_fish -d "Update fish"
         git add -A
         git commit -m "[$NOW] (update fish) Pulling changes from fish-dots"
         git push
-        cd $PWD
+        cd $_local_starting_dir
     end
     _update_chezmoi
-    cd $PWD
-    set --erase PWD
+    cd $_starting_dir
+    set --erase _starting_dir
     set --erase NOW
     set --erase flag
     return $status
