@@ -1,4 +1,8 @@
-function update -a cmd -a flag -d "Update various tools"
+function update -a cmd -d "Update various tools"
+    set -gx PWD (pwd)
+    if test (count $argv) -eq 2
+        set -g flag $argv[2]
+    end
     switch $cmd
         case chezmoi
             _update_chezmoi $flag
@@ -24,19 +28,31 @@ function update -a cmd -a flag -d "Update various tools"
             echo "dotfiles in the `~/.dotfiles' directory then update the chezmoi repo." >&2
             return 1
     end
+    cd $PWD
+    set --erase PWD
+    set --erase flag
     return $status
 end
 
-function _update_chezmoi -a flag -d "Update chezmoi"
+function _update_chezmoi -d "Update chezmoi"
+    if test (count $argv) -eq 1
+        set -g flag $argv[1]
+    end
     if test $flag = --help; or test $flag = -h
         echo "Updates chezmoi with `chezmoi update'." >&2
         return 1
     end
     chezmoi update --recursive --recurse-submodules
+    cd $PWD
+    set --erase PWD
+    set --erase flag
     return $status
 end
 
-function _update_asdf -a flag -d "Update asdf"
+function _update_asdf -d "Update asdf"
+    if test (count $argv) -eq 1
+        set -g flag $argv[1]
+    end
     if test $flag = --help; or test $flag = -h
         echo "Updates asdf plugins with `asdf plugin update --all'." >&2
         echo "Also updates packages that are out of date in `~/.tool-versions'." >&2
@@ -48,10 +64,16 @@ function _update_asdf -a flag -d "Update asdf"
         asdf install $plugin latest
         asdf set $plugin latest
     end
+    cd $PWD
+    set --erase PWD
+    set --erase flag
     return $status
 end
 
-function _update_neovim -a flag -d "Update neovim"
+function _update_neovim -d "Update neovim"
+    if test (count $argv) -eq 1
+        set -g flag $argv[1]
+    end
     if test $flag = --help; or test $flag = -h
         echo "Updates the neovim configuration by syncing" >&2
         echo "`~/.dotfiles/nvim-dots'" >&2
@@ -74,10 +96,17 @@ function _update_neovim -a flag -d "Update neovim"
         cd $PWD
     end
     _update_chezmoi
+    cd $PWD
+    set --erase PWD
+    set --erase NOW
+    set --erase flag
     return $status
 end
 
-function _update_fish -a flag -d "Update fish"
+function _update_fish -d "Update fish"
+    if test (count $argv) -eq 1
+        set -g flag $argv[1]
+    end
     if test $flag = --help; or test $flag = -h
         echo "Updates the fish configuration by syncing" >&2
         echo "`~/.dotfiles/fish-dots'" >&2
@@ -100,5 +129,9 @@ function _update_fish -a flag -d "Update fish"
         cd $PWD
     end
     _update_chezmoi
+    cd $PWD
+    set --erase PWD
+    set --erase NOW
+    set --erase flag
     return $status
 end
