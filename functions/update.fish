@@ -7,14 +7,14 @@ function update -a cmd -d "Update various tools"
         case chezmoi
             _update_chezmoi $flag
         case asdf
-            _update_asdf
+            _update_asdf $flag
         case neovim nvim
-            _update_neovim
+            _update_neovim $flag
         case fish
-            _update_fish
+            _update_fish $flag
         case all
-            _update_chezmoi
-            _update_asdf
+            _update_chezmoi $flag
+            _update_asdf $flag
         case *
             echo "Unknown update target: $cmd" >&2
             echo "Supported targets:" >&2
@@ -38,9 +38,11 @@ function _update_chezmoi -d "Update chezmoi"
     if test (count $argv) -eq 1
         set -g flag $argv[1]
     end
-    if test $flag = "--help"; or test $flag = "-h"
-        echo "Updates chezmoi with `chezmoi update'." >&2
-        return 1
+    if test -n $flag
+        if test $flag = "--help"; or test $flag = "-h"
+            echo "Updates chezmoi with `chezmoi update'." >&2
+            return 1
+        end
     end
     chezmoi update --recursive --recurse-submodules
     cd $_starting_dir
@@ -53,10 +55,12 @@ function _update_asdf -d "Update asdf"
     if test (count $argv) -eq 1
         set -g flag $argv[1]
     end
-    if test $flag = "--help"; or test $flag = "-h"
-        echo "Updates asdf plugins with `asdf plugin update --all'." >&2
-        echo "Also updates packages that are out of date in `~/.tool-versions'." >&2
-        return 1
+    if test -n flag 
+        if test $flag = "--help"; or test $flag = "-h"
+            echo "Updates asdf plugins with `asdf plugin update --all'." >&2
+            echo "Also updates packages that are out of date in `~/.tool-versions'." >&2
+            return 1
+        end
     end
     asdf plugin update --all
     set -f _update_plugins (asdf latest --all | grep missing | awk '{print $1}')
@@ -74,11 +78,13 @@ function _update_neovim -d "Update neovim"
     if test (count $argv) -eq 1
         set -g flag $argv[1]
     end
-    if test $flag = --help; or test $flag = -h
-        echo "Updates the neovim configuration by syncing" >&2
-        echo "`~/.dotfiles/nvim-dots'" >&2
-        echo "with the chezmoi nvim configs" >&2
-        return 1
+    if test -n $flag
+        if test $flag = "--help"; or test $flag = "-h"
+            echo "Updates the neovim configuration by syncing" >&2
+            echo "`~/.dotfiles/nvim-dots'" >&2
+            echo "with the chezmoi nvim configs" >&2
+            return 1
+        end
     end
     begin
         set -f _local_starting_dir (pwd)
@@ -107,11 +113,13 @@ function _update_fish -d "Update fish"
     if test (count $argv) -eq 1
         set -g flag $argv[1]
     end
-    if test $flag = --help; or test $flag = -h
-        echo "Updates the fish configuration by syncing" >&2
-        echo "`~/.dotfiles/fish-dots'" >&2
-        echo "with the chezmoi fish configs" >&2
-        return 1
+    if test -n $flag
+        if test $flag = "--help"; or test $flag = "-h"
+            echo "Updates the fish configuration by syncing" >&2
+            echo "`~/.dotfiles/fish-dots'" >&2
+            echo "with the chezmoi fish configs" >&2
+            return 1
+        end
     end
     begin
         set -f _local_starting_dir (pwd)
