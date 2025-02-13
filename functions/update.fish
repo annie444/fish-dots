@@ -39,7 +39,7 @@ function _update_chezmoi -d "Update chezmoi"
         set -g flag $argv[1]
     end
     if test -n $flag
-        if test $flag = "--help"; or test $flag = "-h"
+        if test $flag = --help || test $flag = -h
             echo "Updates chezmoi with `chezmoi update'." >&2
             return 1
         end
@@ -55,8 +55,8 @@ function _update_asdf -d "Update asdf"
     if test (count $argv) -eq 1
         set -g flag $argv[1]
     end
-    if test -n flag 
-        if test $flag = "--help"; or test $flag = "-h"
+    if test -n flag
+        if test $flag = --help || test $flag = -h
             echo "Updates asdf plugins with `asdf plugin update --all'." >&2
             echo "Also updates packages that are out of date in `~/.tool-versions'." >&2
             return 1
@@ -79,7 +79,7 @@ function _update_neovim -d "Update neovim"
         set -g flag $argv[1]
     end
     if test -n $flag
-        if test $flag = "--help"; or test $flag = "-h"
+        if test $flag = --help || test $flag = -h
             echo "Updates the neovim configuration by syncing" >&2
             echo "`~/.dotfiles/nvim-dots'" >&2
             echo "with the chezmoi nvim configs" >&2
@@ -114,7 +114,7 @@ function _update_fish -d "Update fish"
         set -g flag $argv[1]
     end
     if test -n $flag
-        if test $flag = "--help"; or test $flag = "-h"
+        if test $flag = --help || test $flag = -h
             echo "Updates the fish configuration by syncing" >&2
             echo "`~/.dotfiles/fish-dots'" >&2
             echo "with the chezmoi fish configs" >&2
