@@ -38,6 +38,7 @@ function _update_chezmoi -d "Update chezmoi"
     if test (count $argv) -eq 1
         set -g flag $argv[1]
     end
+    echo "Debug flag: '$flag'"
     if test -n $flag
         if test $flag = --help || test $flag = -h
             echo "Updates chezmoi with `chezmoi update'." >&2
@@ -55,6 +56,7 @@ function _update_asdf -d "Update asdf"
     if test (count $argv) -eq 1
         set -g flag $argv[1]
     end
+    echo "Debug flag: '$flag'"
     if test -n flag
         if test $flag = --help || test $flag = -h
             echo "Updates asdf plugins with `asdf plugin update --all'." >&2
@@ -78,6 +80,7 @@ function _update_neovim -d "Update neovim"
     if test (count $argv) -eq 1
         set -g flag $argv[1]
     end
+    echo "Debug flag: '$flag'"
     if test -n $flag
         if test $flag = --help || test $flag = -h
             echo "Updates the neovim configuration by syncing" >&2
@@ -113,6 +116,7 @@ function _update_fish -d "Update fish"
     if test (count $argv) -eq 1
         set -g flag $argv[1]
     end
+    echo "Debug flag: '$flag'"
     if test -n $flag
         if test $flag = --help || test $flag = -h
             echo "Updates the fish configuration by syncing" >&2
