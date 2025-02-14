@@ -1,5 +1,6 @@
 function update -a cmd -d "Update various tools"
     argparse --name update -s h/help -- $argv
+    echo "Debug argv: '$argv', cmd: '$cmd', flag_h: '$flag_h', flag_help '$flag_help'" >&2
     switch $cmd
         case chezmoi
             _update_chezmoi $flag_h $flag_help $argv
@@ -32,7 +33,8 @@ end
 
 function _update_chezmoi -d "Update chezmoi"
     argparse --name "update chezmoi" h/help -- $argv
-    if test -z "$_flag_h" -o -z "$_flag_help"
+    echo "Debug argv: '$argv', flag_h: '$flag_h', flag_help '$flag_help'" >&2
+    if test -n "$_flag_h" -o -n "$_flag_help"
         echo "Updates chezmoi with `chezmoi update'." >&2
         return 1
     end
@@ -44,7 +46,8 @@ end
 
 function _update_asdf -d "Update asdf"
     argparse --name "update asdf" h/help -- $argv
-    if test -z "$_flag_h" -o -z "$_flag_help"
+    echo "Debug argv: '$argv', flag_h: '$flag_h', flag_help '$flag_help'" >&2
+    if test -n "$_flag_h" -o -n "$_flag_help"
         echo "Updates asdf plugins with `asdf plugin update --all'." >&2
         echo "Also updates packages that are out of date in `~/.tool-versions'." >&2
         return 1
@@ -62,7 +65,8 @@ end
 
 function _update_neovim -d "Update neovim"
     argparse --name "update neovim" h/help -- $argv
-    if test -z "$_flag_h" -o -z "$_flag_help"
+    echo "Debug argv: '$argv', flag_h: '$flag_h', flag_help '$flag_help'" >&2
+    if test -n "$_flag_h" -o -n "$_flag_help"
         echo "Updates the neovim configuration by syncing" >&2
         echo "`~/.dotfiles/nvim-dots'" >&2
         echo "with the chezmoi nvim configs" >&2
@@ -92,7 +96,8 @@ end
 
 function _update_fish -d "Update fish"
     argparse --name "update fish" h/help -- $argv
-    if test -z "$_flag_h" -o -z "$_flag_help"
+    echo "Debug argv: '$argv', flag_h: '$flag_h', flag_help '$flag_help'" >&2
+    if test -n "$_flag_h" -o -n "$_flag_help"
         echo "Updates the fish configuration by syncing" >&2
         echo "`~/.dotfiles/fish-dots'" >&2
         echo "with the chezmoi fish configs" >&2

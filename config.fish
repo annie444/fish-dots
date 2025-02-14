@@ -15,42 +15,42 @@ function add_path
     end
 end
 
-# Homebrew paths
-set _coreutils_path /opt/homebrew/opt/coreutils/bin
-if test -d $_coreutils_path
-    add_path $_coreutils_path
-    add_path /opt/homebrew/opt/coreutils/libexec/gnubin
+function test_add_path
+    set -l path $argv
+    if test -d $path
+        add_path $path
+    end
 end
-set --erase _coreutils_path
 
-# ASDF configuration code
-set _asdf_shims "$ASDF_DATA_DIR/shims"
-add_path $_asdf_shims
-set --erase _asdf_shims
+function add_complete
+    set -l path $argv
+    if not contains $path $fish_complete_path
+        set -gx --prepend fish_complete_path $path
+    end
+end
 
-# Add local bin to path
-set _local_bin_path "$HOME/.local/bin"
-add_path $_local_bin_path
-set --erase _local_bin_path
+function test_add_complete
+    set -l path $argv
+    if test -d $path
+        add_complete $path
+    end
+end
 
-# Add cargo to path
-set _cargo_bin_path "$HOME/.cargo/bin"
-add_path $_cargo_bin_path
-set --erase _cargo_bin_path
+set -g _user_paths \
+    /opt/homebrew/opt/coreutils/libexec/gnubin \
+    /opt/homebrew/opt/coreutils/bin \
+    /opt/homebrew/sbin \
+    /opt/homebrew/bin \
+    $ASDF_DATA_DIR/shims \
+    $HOME/.local/bin \
+    $HOME/.cargo/bin
+for _path in _user_paths
+    test_add_path $_brew_path
+end
+set --erase _user_paths
 
 # Local environment config
 direnv hook fish | source
-
-# GPG Config
-if not pgrep -x -u "$USER" gpg-agent &>/dev/null
-    gpg-connect-agent /bye &>/dev/null
-end
-
-# Set GPG TTY as stated in 'man gpg-agent'
-set -gx GPG_TTY (tty)
-
-# Refresh gpg-agent tty in case user switches into an X session
-gpg-connect-agent updatestartuptty /bye >/dev/null
 
 status --is-interactive; and begin
     # Fish Config
@@ -94,16 +94,13 @@ status --is-interactive; and begin
     function activate
         set -l cwd (pwd -P)
         source "$cwd/.venv/bin/activate.fish"
+        set --erase cwd
     end
 
     # Homebrew
-    if test -d /opt/homebrew; or test -d /home/linuxbrew/.linuxbrew
-        set -gx HOMEBREW_AUTO_UPDATE_SECS 86400
-    end
-    if test -d /opt/homebrew/share/fish/completions
-        set -p fish_complete_path (brew --prefix)/share/fish/completions
-        set -p fish_complete_path (brew --prefix)/share/fish/vendor_completions.d
-    end
+    set -gx HOMEBREW_AUTO_UPDATE_SECS 86400
+
+    test_add_complete /opt/homebrew/share/fish/completions /opt/homebrew/share/fish/vendor_completions.d
 
     if test -d $HOME/.config/jenkins
         source $HOME/.config/jenkins/creds.fish
@@ -117,6 +114,7 @@ status --is-interactive; and begin
     set -gx fzf_diff_highlighter 'batdiff --paging=never --width=20'
     set -gx fzf_history_time_format "%Y-%m-%d %H:%M:%S"
     set -gx fzf_fd_opts ''
+
     # from https://github.com/junegunn/fzf?tab=readme-ov-file#environment-variables
     set -gx FZF_DEFAULT_COMMAND 'bfs -type f'
     set -gx FZF_DEFAULT_OPTS '--height 40% --layout=reverse --border --prompt="> " --preview-window=right:60%:wrap --preview="bat --color=always --style=numbers --line-range=:500s {}"'
@@ -124,6 +122,7 @@ status --is-interactive; and begin
     set -gx FZF_COMPLETION_OPTS '--border --info=inline'
     set -gx FZF_COMPLETION_PATH_OPTS '--walker file,dir,follow,hidden'
     set -gx FZF_COMPLETION_DIR_OPTS '--walker dir,hidden'
+
     function _fzf_comprun
         set -l command $argv[1]
         set -e $argv[1]
