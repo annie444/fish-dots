@@ -44,8 +44,8 @@ set -g _user_paths \
     $ASDF_DATA_DIR/shims \
     $HOME/.local/bin \
     $HOME/.cargo/bin
-for _path in _user_paths
-    test_add_path $_brew_path
+for _path in $_user_paths
+    test_add_path $_path
 end
 set --erase _user_paths
 
