@@ -100,7 +100,8 @@ status --is-interactive; and begin
     # Homebrew
     set -gx HOMEBREW_AUTO_UPDATE_SECS 86400
 
-    test_add_complete /opt/homebrew/share/fish/completions /opt/homebrew/share/fish/vendor_completions.d
+    test_add_complete /opt/homebrew/share/fish/completions
+    test_add_complete /opt/homebrew/share/fish/vendor_completions.d
 
     if test -d $HOME/.config/jenkins
         source $HOME/.config/jenkins/creds.fish
