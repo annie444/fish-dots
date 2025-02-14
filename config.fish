@@ -167,6 +167,8 @@ status --is-interactive; and begin
     if test -e "$HOME/.config/op/plugins.sh"
         source "$HOME/.config/op/plugins.sh"
     end
+
+    source ~/.gnupg/gpg.fish
 end
 
 # GCloud paths

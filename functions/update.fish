@@ -1,20 +1,17 @@
 function update -a cmd -d "Update various tools"
-    set -gx _starting_dir (pwd)
-    if test (count $argv) -eq 2
-        set -g flag $argv[2]
-    end
+    argparse --name update -s h/help -- $argv
     switch $cmd
         case chezmoi
-            _update_chezmoi $flag
+            _update_chezmoi $flag_h $flag_help $argv
         case asdf
-            _update_asdf $flag
+            _update_asdf $flag_h $flag_help $argv
         case neovim nvim
-            _update_neovim $flag
+            _update_neovim $flag_h $flag_help $argv
         case fish
-            _update_fish $flag
+            _update_fish $flag_h $flag_help $argv
         case all
-            _update_chezmoi $flag
-            _update_asdf $flag
+            _update_chezmoi $flag_h $flag_help $argv
+            _update_asdf $flag_h $flag_help $argv
         case *
             echo "Unknown update target: $cmd" >&2
             echo "Supported targets:" >&2
@@ -30,39 +27,27 @@ function update -a cmd -d "Update various tools"
     end
     cd $_starting_dir
     set --erase _starting_dir
-    set --erase flag
     return $status
 end
 
 function _update_chezmoi -d "Update chezmoi"
-    if test (count $argv) -eq 1
-        set -g flag $argv[1]
-    end
-    echo "Debug flag: '$flag'"
-    if test -n $flag
-        if test $flag = --help || test $flag = -h
-            echo "Updates chezmoi with `chezmoi update'." >&2
-            return 1
-        end
+    argparse --name "update chezmoi" h/help -- $argv
+    if test -z "$_flag_h" -o -z "$_flag_help"
+        echo "Updates chezmoi with `chezmoi update'." >&2
+        return 1
     end
     chezmoi update --recursive --recurse-submodules
     cd $_starting_dir
     set --erase _starting_dir
-    set --erase flag
     return $status
 end
 
 function _update_asdf -d "Update asdf"
-    if test (count $argv) -eq 1
-        set -g flag $argv[1]
-    end
-    echo "Debug flag: '$flag'"
-    if test -n flag
-        if test $flag = --help || test $flag = -h
-            echo "Updates asdf plugins with `asdf plugin update --all'." >&2
-            echo "Also updates packages that are out of date in `~/.tool-versions'." >&2
-            return 1
-        end
+    argparse --name "update asdf" h/help -- $argv
+    if test -z "$_flag_h" -o -z "$_flag_help"
+        echo "Updates asdf plugins with `asdf plugin update --all'." >&2
+        echo "Also updates packages that are out of date in `~/.tool-versions'." >&2
+        return 1
     end
     asdf plugin update --all
     set -f _update_plugins (asdf latest --all | grep missing | awk '{print $1}')
@@ -72,22 +57,16 @@ function _update_asdf -d "Update asdf"
     end
     cd $_starting_dir
     set --erase _starting_dir
-    set --erase flag
     return $status
 end
 
 function _update_neovim -d "Update neovim"
-    if test (count $argv) -eq 1
-        set -g flag $argv[1]
-    end
-    echo "Debug flag: '$flag'"
-    if test -n $flag
-        if test $flag = --help || test $flag = -h
-            echo "Updates the neovim configuration by syncing" >&2
-            echo "`~/.dotfiles/nvim-dots'" >&2
-            echo "with the chezmoi nvim configs" >&2
-            return 1
-        end
+    argparse --name "update neovim" h/help -- $argv
+    if test -z "$_flag_h" -o -z "$_flag_help"
+        echo "Updates the neovim configuration by syncing" >&2
+        echo "`~/.dotfiles/nvim-dots'" >&2
+        echo "with the chezmoi nvim configs" >&2
+        return 1
     end
     begin
         set -f _local_starting_dir (pwd)
@@ -108,22 +87,16 @@ function _update_neovim -d "Update neovim"
     cd $_starting_dir
     set --erase _starting_dir
     set --erase NOW
-    set --erase flag
     return $status
 end
 
 function _update_fish -d "Update fish"
-    if test (count $argv) -eq 1
-        set -g flag $argv[1]
-    end
-    echo "Debug flag: '$flag'"
-    if test -n $flag
-        if test $flag = --help || test $flag = -h
-            echo "Updates the fish configuration by syncing" >&2
-            echo "`~/.dotfiles/fish-dots'" >&2
-            echo "with the chezmoi fish configs" >&2
-            return 1
-        end
+    argparse --name "update fish" h/help -- $argv
+    if test -z "$_flag_h" -o -z "$_flag_help"
+        echo "Updates the fish configuration by syncing" >&2
+        echo "`~/.dotfiles/fish-dots'" >&2
+        echo "with the chezmoi fish configs" >&2
+        return 1
     end
     begin
         set -f _local_starting_dir (pwd)
@@ -144,6 +117,5 @@ function _update_fish -d "Update fish"
     cd $_starting_dir
     set --erase _starting_dir
     set --erase NOW
-    set --erase flag
     return $status
 end
