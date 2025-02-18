@@ -7,6 +7,8 @@ set -gx COLORTERM truecolor
 set -gx TERM xterm-256color
 set -gx PAGER less
 set -gx ASDF_DATA_DIR "$HOME/.asdf"
+set -gx ASDF_CONCURRENCY (nproc)
+set -gx ASDF_CONFIG_FILE "$HOME/.asdfrc"
 
 function add_path
     set -l path $argv
