@@ -45,7 +45,8 @@ set -g _user_paths \
     /opt/homebrew/bin \
     $ASDF_DATA_DIR/shims \
     $HOME/.local/bin \
-    $HOME/.cargo/bin
+    $HOME/.cargo/bin \
+    $HOME/bin
 for _path in $_user_paths
     test_add_path $_path
 end
@@ -64,6 +65,7 @@ status --is-interactive; and begin
     thefuck --alias | source
     batman --export-env | source
     starship init fish | source
+    fzf --fish | source
     eval (batpipe)
 
     # Aliases
@@ -89,16 +91,6 @@ status --is-interactive; and begin
     alias vimdiff "nvim -d"
     alias bathelp "bat --plain --language=help"
 
-    function help
-        $argv --help 2>&1 | bathelp
-    end
-
-    function activate
-        set -l cwd (pwd -P)
-        source "$cwd/.venv/bin/activate.fish"
-        set --erase cwd
-    end
-
     # Homebrew
     set -gx HOMEBREW_AUTO_UPDATE_SECS 86400
 
@@ -110,7 +102,6 @@ status --is-interactive; and begin
     end
 
     # FZF Config
-    fzf --fish | source
     # from https://github.com/PatrickF1/fzf.fish#change-fzf-options-for-a-specific-command
     set -gx fzf_preview_dir_cmd 'tree -C {} | head -n 200'
     set -gx fzf_preview_file_cmd 'bat --color=always --style=numbers --line-range=:500s {}'
@@ -125,27 +116,6 @@ status --is-interactive; and begin
     set -gx FZF_COMPLETION_OPTS '--border --info=inline'
     set -gx FZF_COMPLETION_PATH_OPTS '--walker file,dir,follow,hidden'
     set -gx FZF_COMPLETION_DIR_OPTS '--walker dir,hidden'
-
-    function _fzf_comprun
-        set -l command $argv[1]
-        set -e $argv[1]
-        switch $command
-            case cd
-                fzf --preview 'tree -C {} | head -200' "$argv"
-            case 'export|unset'
-                fzf --preview "eval 'echo \$'{}" "$argv"
-            case ssh
-                fzf --preview 'dig {}' "$argv"
-            case '*'
-                fzf --preview 'bat -n --color=always {}' "$argv"
-        end
-    end
-    function _fzf_compgen_path
-        bfs -L . -exclude -path "*.git*" -name $argv
-    end
-    function _fzf_compgen_dir
-        bfs -L . -type d -exclude -path "*.git*" $argv
-    end
 
     # Kitty config
     if set -q KITTY_INSTALLATION_DIR
