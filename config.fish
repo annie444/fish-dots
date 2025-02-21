@@ -1,14 +1,3 @@
-# Environment Config
-set -gx fish_term24bit 1
-set -gx EDITOR nvim
-set -gx XDG_CONFIG_HOME "$HOME/.config"
-set -gx XDG_CACHE_HOME "$HOME/.cache"
-set -gx COLORTERM truecolor
-set -gx TERM xterm-256color
-set -gx PAGER less
-set -gx ASDF_DATA_DIR "$HOME/.asdf"
-set -gx ASDF_CONCURRENCY (nproc)
-set -gx ASDF_CONFIG_FILE "$HOME/.asdfrc"
 
 function add_path
     set -l path $argv
@@ -24,6 +13,8 @@ function test_add_path
     end
 end
 
+test_add_path /opt/homebrew/bin
+
 function add_complete
     set -l path $argv
     if not contains $path $fish_complete_path
@@ -37,6 +28,19 @@ function test_add_complete
         add_complete $path
     end
 end
+
+# Environment Config
+set -gx fish_term24bit 1
+set -gx EDITOR nvim
+set -gx XDG_CONFIG_HOME "$HOME/.config"
+set -gx XDG_CACHE_HOME "$HOME/.cache"
+set -gx COLORTERM truecolor
+set -gx TERM xterm-256color
+set -gx PAGER less
+set -gx ASDF_DATA_DIR "$HOME/.asdf"
+set -gx ASDF_CONCURRENCY (nproc)
+set -gx ASDF_CONFIG_FILE "$HOME/.asdfrc"
+
 
 set -g _user_paths \
     /opt/homebrew/opt/coreutils/libexec/gnubin \
