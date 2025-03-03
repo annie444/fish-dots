@@ -1,33 +1,10 @@
-
-function add_path
-    set -l path $argv
-    if not contains $path $PATH
-        set -gx --prepend PATH $path
-    end
-end
-
-function test_add_path
-    set -l path $argv
-    if test -d $path
-        add_path $path
-    end
-end
+source ./helpers.fish
 
 test_add_path /opt/homebrew/bin
-
-function add_complete
-    set -l path $argv
-    if not contains $path $fish_complete_path
-        set -gx --prepend fish_complete_path $path
-    end
-end
-
-function test_add_complete
-    set -l path $argv
-    if test -d $path
-        add_complete $path
-    end
-end
+test_add_functions /opt/homebrew/share/fish/functions
+test_add_functions /opt/homebrew/share/fish/vendor_functions.d
+test_add_complete /opt/homebrew/share/fish/completions
+test_add_complete /opt/homebrew/share/fish/vendor_completions.d
 
 # Environment Config
 set -gx fish_term24bit 1
@@ -40,7 +17,6 @@ set -gx PAGER less
 set -gx ASDF_DATA_DIR "$HOME/.asdf"
 set -gx ASDF_CONCURRENCY (nproc)
 set -gx ASDF_CONFIG_FILE "$HOME/.asdfrc"
-
 
 set -g _user_paths \
     /opt/homebrew/opt/coreutils/libexec/gnubin \
@@ -97,9 +73,6 @@ status --is-interactive; and begin
 
     # Homebrew
     set -gx HOMEBREW_AUTO_UPDATE_SECS 86400
-
-    test_add_complete /opt/homebrew/share/fish/completions
-    test_add_complete /opt/homebrew/share/fish/vendor_completions.d
 
     if test -d $HOME/.config/jenkins
         source $HOME/.config/jenkins/creds.fish
