@@ -82,13 +82,13 @@ status --is-interactive; and begin
     set -gx fish_greeting ""
 
     # Plugins
-    atuin init fish | source
     zoxide init fish | source
     thefuck --alias | source
     batman --export-env | source
     starship init fish | source
     fzf --fish | source
     eval (batpipe)
+    atuin init fish | source
 
     # Aliases
     alias du dust
