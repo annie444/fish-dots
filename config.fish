@@ -45,6 +45,7 @@ test_add_functions /opt/homebrew/share/fish/functions
 test_add_functions /opt/homebrew/share/fish/vendor_functions.d
 test_add_complete /opt/homebrew/share/fish/completions
 test_add_complete /opt/homebrew/share/fish/vendor_completions.d
+test_add_path $HOME/.atuin/bin
 
 # Environment Config
 set -gx fish_term24bit 1
@@ -81,6 +82,7 @@ status --is-interactive; and begin
     set -gx fish_greeting ""
 
     # Plugins
+    atuin init fish | source
     zoxide init fish | source
     thefuck --alias | source
     batman --export-env | source
