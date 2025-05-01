@@ -103,6 +103,7 @@ status --is-interactive; and begin
     alias cat bat
     alias bgrep batgrep
     alias bwatch batwatch
+    alias find bfs
     alias cd z
     alias '..' 'z ..'
     alias ls 'eza -1GghmMoXr --color=always --icons=always -s created --group-directories-first --time-style long-iso --git --git-repos --hyperlink --show-symlinks -w 10'
@@ -113,8 +114,28 @@ status --is-interactive; and begin
     alias vimdiff "nvim -d"
     alias bathelp "bat --plain --language=help"
 
-    # Homebrew
-    set -gx HOMEBREW_AUTO_UPDATE_SECS 86400
+    # from https://docs.brew.sh/Manpage#environment
+    set -gx HOMEBREW_AUTO_UPDATE_SECS 3600
+    set -gx HOMEBREW_API_AUTO_UPDATE_SECS 450
+    set -gx HOMEBREW_BAT 1
+    set -gx HOMEBREW_BAT_CONFIG_PATH "$HOME/.config/bat/config"
+    set -gx HOMEBREW_BAT_THEME Dracula
+    set -gx HOMEBREW_CLEANUP_MAX_AGE_DAYS 10
+    set -gx HOMEBREW_CLEANUP_PERIODIC_FULL_DAYS 5
+    set -gx HOMEBREW_COLOR 1
+    set -gx HOMEBREW_CURL_RETRIES 3
+    set -gx HOMEBREW_CURL_VERBOSE 1
+    set -gx HOMEBREW_DEVELOPER 1
+    set -gx HOMEBREW_DISPLAY_INSTALL_TIMES 1
+    set -gx HOMEBREW_EDITOR nvim
+    set -gx HOMEBREW_FAIL_LOG_LINES 54
+    set -gx HOMEBREW_GITHUB_PACKAGES_USER annie444
+    set -gx HOMEBREW_GIT_COMMITTER_EMAIL "annie.ehler.4@gmail.com"
+    set -gx HOMEBREW_GIT_COMMITTER_NAME "Annie Ehler"
+    set -gx HOMEBREW_GIT_EMAIL "annie.ehler.4@gmail.com"
+    set -gx HOMEBREW_GIT_NAME "Annie Ehler"
+    set -gx HOMEBREW_VERBOSE 1
+    set -gx HOMEBREW_VERIFY_ATTESTATIONS 1
 
     if test -d $HOME/.config/jenkins
         source $HOME/.config/jenkins/creds.fish
@@ -122,19 +143,13 @@ status --is-interactive; and begin
 
     # FZF Config
     # from https://github.com/PatrickF1/fzf.fish#change-fzf-options-for-a-specific-command
-    set -gx fzf_preview_dir_cmd 'tree -C {} | head -n 200'
-    set -gx fzf_preview_file_cmd 'bat --color=always --style=numbers --line-range=:500s {}'
+    set -gx fzf_preview_dir_cmd 'eza --all --color=always'
+    set -gx fzf_preview_file_cmd 'bat --style=numbers --line-range=:500s {}'
     set -gx fzf_diff_highlighter 'batdiff --paging=never --width=20'
     set -gx fzf_history_time_format "%Y-%m-%d %H:%M:%S"
-    set -gx fzf_fd_opts ''
 
-    # from https://github.com/junegunn/fzf?tab=readme-ov-file#environment-variables
-    set -gx FZF_DEFAULT_COMMAND 'bfs -type f'
-    set -gx FZF_DEFAULT_OPTS '--height 40% --layout=reverse --border --prompt="> " --preview-window=right:60%:wrap --preview="bat --color=always --style=numbers --line-range=:500s {}"'
-    set -gx FZF_COMPLETION_TRIGGER '**'
-    set -gx FZF_COMPLETION_OPTS '--border --info=inline'
-    set -gx FZF_COMPLETION_PATH_OPTS '--walker file,dir,follow,hidden'
-    set -gx FZF_COMPLETION_DIR_OPTS '--walker dir,hidden'
+    # from https://github.com/eth-p/bat-extras/blob/master/doc/batdiff.md
+    set -gx BATDIFF_USE_DELTA true
 
     # Kitty config
     if set -q KITTY_INSTALLATION_DIR
@@ -142,14 +157,14 @@ status --is-interactive; and begin
         set --prepend fish_complete_path "$KITTY_INSTALLATION_DIR/shell-integration/fish/vendor_completions.d"
     end
 
-    # LaTeX config
+    # LaTeX config (Linux only)
     if test -d /usr/local/texlive/2024
         set -gx MANPATH /usr/local/texlive/2024/texmf-dist/doc/man $MANPATH
         set -gx INFOPATH /usr/local/texlive/2024/texmf-dist/doc/info $INFOPATH
         set -gx PATH /usr/local/texlive/2024/bin/x86_64-linux $PATH
     end
 
-    # Bat config
+    # from https://github.com/sharkdp/bat?tab=readme-ov-file#customization
     set -gx BAT_THEME Dracula
     set -gx BATPIPE color
     set -gx BATDIFF_USE_DELTA true
