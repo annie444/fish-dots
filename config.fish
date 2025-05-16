@@ -124,7 +124,6 @@ status --is-interactive; and begin
     set -gx HOMEBREW_CLEANUP_PERIODIC_FULL_DAYS 5
     set -gx HOMEBREW_COLOR 1
     set -gx HOMEBREW_CURL_RETRIES 3
-    set -gx HOMEBREW_CURL_VERBOSE 1
     set -gx HOMEBREW_DEVELOPER 1
     set -gx HOMEBREW_DISPLAY_INSTALL_TIMES 1
     set -gx HOMEBREW_EDITOR nvim
@@ -134,8 +133,6 @@ status --is-interactive; and begin
     set -gx HOMEBREW_GIT_COMMITTER_NAME "Annie Ehler"
     set -gx HOMEBREW_GIT_EMAIL "annie.ehler.4@gmail.com"
     set -gx HOMEBREW_GIT_NAME "Annie Ehler"
-    set -gx HOMEBREW_VERBOSE 1
-    set -gx HOMEBREW_VERIFY_ATTESTATIONS 1
 
     if test -d $HOME/.config/jenkins
         source $HOME/.config/jenkins/creds.fish
