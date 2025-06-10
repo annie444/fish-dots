@@ -133,6 +133,12 @@ status --is-interactive; and begin
     set -gx HOMEBREW_GIT_EMAIL "annie.ehler.4@gmail.com"
     set -gx HOMEBREW_GIT_NAME "Annie Ehler"
 
+    # Just Config
+    set -gx JUST_HIGHLIGHT 1
+    set -gx JUST_TIMESTAMP 1
+    set -gx JUST_TIMESTAMP_FORMAT "%Y-%m-%d %H:%M:%S"
+    set -gx JUST_UNSTABLE 1
+
     if test -d $HOME/.config/jenkins
         source $HOME/.config/jenkins/creds.fish
     end
