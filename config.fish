@@ -60,6 +60,7 @@ set -gx ASDF_CONCURRENCY (nproc)
 set -gx ASDF_CONFIG_FILE "$HOME/.asdfrc"
 
 set -g _user_paths \
+    /usr/local/bin \
     /opt/homebrew/opt/coreutils/libexec/gnubin \
     /opt/homebrew/opt/coreutils/bin \
     /opt/homebrew/sbin \
@@ -67,7 +68,10 @@ set -g _user_paths \
     $ASDF_DATA_DIR/shims \
     $HOME/.local/bin \
     $HOME/.cargo/bin \
-    $HOME/bin
+    $HOME/bin \
+    $HOME/.deno/bin \
+    $HOME/Library/pnpm \
+    $HOME/.local/share/pnpm
 for _path in $_user_paths
     test_add_path $_path
 end
