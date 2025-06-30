@@ -127,15 +127,8 @@ status --is-interactive; and begin
     set -gx HOMEBREW_CLEANUP_MAX_AGE_DAYS 10
     set -gx HOMEBREW_CLEANUP_PERIODIC_FULL_DAYS 5
     set -gx HOMEBREW_COLOR 1
-    set -gx HOMEBREW_CURL_RETRIES 3
-    set -gx HOMEBREW_DISPLAY_INSTALL_TIMES 1
     set -gx HOMEBREW_EDITOR nvim
     set -gx HOMEBREW_FAIL_LOG_LINES 1000
-    set -gx HOMEBREW_GITHUB_PACKAGES_USER annie444
-    set -gx HOMEBREW_GIT_COMMITTER_EMAIL "annie.ehler.4@gmail.com"
-    set -gx HOMEBREW_GIT_COMMITTER_NAME "Annie Ehler"
-    set -gx HOMEBREW_GIT_EMAIL "annie.ehler.4@gmail.com"
-    set -gx HOMEBREW_GIT_NAME "Annie Ehler"
 
     # Just Config
     set -gx JUST_HIGHLIGHT true
