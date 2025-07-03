@@ -40,6 +40,10 @@ function test_add_functions
     end
 end
 
+# Set ulimits
+ulimit -n 200000
+ulimit -u 2048
+
 test_add_path /opt/homebrew/bin
 test_add_functions /opt/homebrew/share/fish/functions
 test_add_functions /opt/homebrew/share/fish/vendor_functions.d
