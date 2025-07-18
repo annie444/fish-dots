@@ -41,8 +41,10 @@ function test_add_functions
 end
 
 # Set ulimits
-ulimit -n 200000
-ulimit -u 2048
+if test (uname) = Darwin
+    ulimit -n 200000
+    ulimit -u 2048
+end
 
 test_add_path /opt/homebrew/bin
 test_add_functions /opt/homebrew/share/fish/functions
