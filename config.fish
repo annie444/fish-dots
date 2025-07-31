@@ -71,6 +71,7 @@ set -g _user_paths \
     /opt/homebrew/opt/coreutils/bin \
     /opt/homebrew/sbin \
     /opt/homebrew/bin \
+    $HOME/.krew/bin \
     $ASDF_DATA_DIR/shims \
     $HOME/.local/bin \
     $HOME/.cargo/bin \
