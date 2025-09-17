@@ -1,4 +1,4 @@
-function notify
+function notify --description 'Send a macOS notification about the status of the last command'
     set -l title Terminal
     set -l group %self
     set -l sender "com.mitchellh.ghostty"

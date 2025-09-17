@@ -10,6 +10,10 @@ function update -a cmd -d "Update various tools"
         case fish
             _update_fish $flag_h $flag_help $argv
         case brew
+            if test (uname) != Darwin
+                echo "The brew update target is only supported on macOS." >&2
+                return 1
+            end
             _update_brew $flag_h $flag_help $argv
         case all
             _partial_fish $flag_h $flag_help $argv
