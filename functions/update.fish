@@ -55,16 +55,18 @@ function _update_usage
 end
 
 function update -d "Update various tools"
-    set -l cmd (string tolower $argv[1])
+    set -l cmd (string lower "$argv[1]")
     argparse --name update -s h/help -- $argv
-    if test -z "$cmd"; and set -ql _flag_h
-        _update_usage
-        return 0
-    else if test -z "$cmd"
-        _echo_help -n -o -c red "Error: "
-        _echo_help "No update target specified."
-        _update_usage
-        return 1
+    if test -z "$cmd"
+        if set -ql _flag_h
+            _update_usage
+            return 0
+        else
+            _echo_help -n -o -c red "Error: "
+            _echo_help "No update target specified."
+            _update_usage
+            return 1
+        end
     end
     switch $cmd
         case chezmoi chez
