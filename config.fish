@@ -185,6 +185,18 @@ status --is-interactive; and begin
     # Enable vi mode
     set -g fish_key_bindings fish_vi_key_bindings
     fish_vi_key_bindings
+
+    # Load PNPM
+    if test -d "$HOME/Library/pnpm"
+        set -gx PNPM_HOME "$HOME/Library/pnpm"
+    else if test -d "$HOME/.local/share/pnpm"
+        set -gx PNPM_HOME "$HOME/.local/share/pnpm"
+    end
+    if set -q PNPM_HOME
+        if not string match -q -- $PNPM_HOME $PATH
+            set -gx PATH "$PNPM_HOME" $PATH
+        end
+    end
 end
 
 # GCloud paths
