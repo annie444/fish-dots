@@ -1,0 +1,4 @@
+[submodule "completions"]
+	path = completions
+	url = https://github.com/annie444/fish-completions
+	branch = main
