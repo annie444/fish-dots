@@ -1,0 +1,76 @@
+name: "Submodules Sync"
+
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 4 */5 * *"
+  workflow_dispatch:
+
+jobs:
+  sync:
+    name: "Submodules Sync"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          submodules: true
+
+      - name: Git Submodule Update
+        shell: bash
+        run: |
+          git pull --recurse-submodules
+          git submodule update --remote --recursive
+
+      - name: Check for Changes
+        id: check_changes
+        shell: bash
+        run: |
+          if [[ -n "$(git diff --exit-code)" ]]; then
+            echo "::notice::Changes detected."
+            echo "has_changes=true" >>"$GITHUB_OUTPUT"
+          else
+            echo "::notice::No changes detected."
+            echo "has_changes=false" >>"$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit and Push Changes
+        if: steps.check_changes.outputs.has_changes == 'true'
+        shell: bash
+        run: |
+          # Configure user
+          git config --global user.name "$GITHUB_ACTOR"
+          git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+          # Check for changes
+          if [[ "$(git status)" == *"nothing to commit, working tree clean"* ]]; then
+            exit
+          fi
+
+          # Stage the changes
+          git add -A
+
+          # Commit the changes
+          NOW="$(date "+%Y-%m-%d %H:%M:%S")"
+          git commit -m "[$NOW] ($GITHUB_WORKFLOW) Updating completions" --author="$GITHUB_ACTOR <$GITHUB_ACTOR_ID+$GITHUB_ACTOR@users.noreply.github.com>"
+
+          # Push the changes
+          git pull
+          git push
+        env:
+          GITHUB_ACTOR_ID: "${{ github.actor_id }}"
+          GITHUB_ACTOR: "${{ github.actor }}"
+          GITHUB_WORKFLOW: "${{ github.workflow }}"
