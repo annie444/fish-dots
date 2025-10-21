@@ -285,12 +285,32 @@ function _partial_fish -d "Pushes changes to fish-dots and updates chezmoi's fis
         if test $status -gt $follow_status
             set -f follow_status $status
         end
+        git pull
+        if test $status -gt $follow_status
+            set -f follow_status $status
+        end
+        git submodule update --recursive
+        if test $status -gt $follow_status
+            set -f follow_status $status
+        end
+        git add -A
+        if test $status -gt $follow_status
+            set -f follow_status $status
+        end
+        git commit -m "[$NOW] (update fish) Committing all changes to fish-completions"
+        if test $status -gt $follow_status
+            set -f follow_status $status
+        end
         git push
         if test $status -gt $follow_status
             set -f follow_status $status
         end
         cd ~/.local/share/chezmoi/dot_config/fish
         git pull origin main
+        if test $status -gt $follow_status
+            set -f follow_status $status
+        end
+        git submodule update --recursive
         if test $status -gt $follow_status
             set -f follow_status $status
         end
