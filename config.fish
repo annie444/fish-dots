@@ -67,6 +67,7 @@ set -gx ASDF_CONFIG_FILE "$HOME/.asdfrc"
 
 set -g _user_paths \
     /usr/local/bin \
+    /usr/local/cuda-13.0/bin \
     /opt/homebrew/opt/coreutils/libexec/gnubin \
     /opt/homebrew/opt/coreutils/bin \
     /opt/homebrew/sbin \
