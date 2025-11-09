@@ -289,10 +289,16 @@ function _partial_fish -d "Pushes changes to fish-dots and updates chezmoi's fis
         if test $status -gt $follow_status
             set -f follow_status $status
         end
-        git submodule update --recursive
+        git submodule update --recursive --init
         if test $status -gt $follow_status
             set -f follow_status $status
         end
+        cd completions/
+        git pull origin main
+        if test $status -gt $follow_status
+            set -f follow_status $status
+        end
+        cd ..
         git add -A
         if test $status -gt $follow_status
             set -f follow_status $status
