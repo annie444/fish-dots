@@ -223,7 +223,7 @@ function _partial_neovim -d "Pushes changes to nvim-dots and updates chezmoi's n
         if test $status -gt $follow_status
             set -f follow_status $status
         end
-        cd ~/.local/share/chezmoi/dot_config/nvim
+        cd ~/.local/share/chezmoi/dot_config/external_nvim
         git pull origin main
         if test $status -gt $follow_status
             set -f follow_status $status
@@ -311,7 +311,7 @@ function _partial_fish -d "Pushes changes to fish-dots and updates chezmoi's fis
         if test $status -gt $follow_status
             set -f follow_status $status
         end
-        cd ~/.local/share/chezmoi/dot_config/fish
+        cd ~/.local/share/chezmoi/dot_config/external_fish
         git pull origin main
         if test $status -gt $follow_status
             set -f follow_status $status
