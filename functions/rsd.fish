@@ -39,7 +39,10 @@ end
 
 function __rsd_help
     echo "rsd v1.0.0"
+    echo ""
+    set_color --bold
     echo "A recursive wrapper around sd for searching and replacing text in files"
+    set_color normal
     echo ""
     set_color --bold green
     __rsd_usage
@@ -61,7 +64,7 @@ function __rsd_help
     echo "            Defaults to the current directory if not specified."
     echo ""
     set_color --dim magenta
-    echo "    <"
+    echo -n "    <"
     set_color normal
     set_color magenta
     echo -n FIND
@@ -69,7 +72,11 @@ function __rsd_help
     set_color --dim magenta
     echo ">"
     set_color normal
-    echo "            The regexp or string (if using `-F`) to search for"
+    echo -n "            The regexp or string (if using `"
+    set_color yellow
+    echo -n -F
+    set_color normal
+    echo "`) to search for"
     echo ""
     set_color --dim magenta
     echo -n "    <"
@@ -86,46 +93,57 @@ function __rsd_help
     set_color --bold green
     echo "Options:"
     set_color normal
-    set_color yellow
+    set_color cyan
     echo -n "    -P"
     set_color normal
     echo -n ", "
-    set_color yellow
+    set_color cyan
     echo --file-pattern
     set_color normal
-    echo "            Only process files matching the given glob pattern (e.g., `*.txt`)"
-    echo ""
+    echo -n "            Only process files matching the given glob pattern (e.g., `"
     set_color yellow
+    echo -n "*.txt"
+    set_color normal
+    echo "`)"
+    echo ""
+    set_color cyan
     echo -n "    -b"
     set_color normal
     echo -n ", "
-    set_color yellow
+    set_color cyan
     echo --no-backup
+    set_color normal
     echo "            Do not create backup files before making replacements (default behavior is to create"
-    echo "            backups with a timestamped extension `.%Y%m%d%H%M%S.bk`)"
-    echo ""
+    echo -n "            backups with a timestamped extension `"
     set_color yellow
+    echo -n ".%Y%m%d%H%M%S.bk"
+    set_color normal
+    echo "`)"
+    echo ""
+    set_color cyan
     echo -n "    -p"
     set_color normal
     echo -n ", "
-    set_color yellow
+    set_color cyan
     echo --preview
+    set_color normal
     echo "            Display changes in a human reviewable format (the specifics of the format are likely to"
     echo "            change in the future)"
     echo ""
-    set_color yellow
+    set_color cyan
     echo -n "    -F"
     set_color normal
     echo -n ", "
-    set_color yellow
+    set_color cyan
     echo --fixed-strings
+    set_color normal
     echo "            Treat FIND and REPLACE_WITH args as literal strings"
     echo ""
-    set_color yellow
+    set_color cyan
     echo -n "    -n"
     set_color normal
     echo -n ", "
-    set_color yellow
+    set_color cyan
     echo -n --max-replacements
     set_color normal
     set_color --dim blue
@@ -144,11 +162,11 @@ function __rsd_help
     echo "            [default: 0]"
     set_color normal
     echo ""
-    set_color yellow
+    set_color cyan
     echo -n "    -f"
     set_color normal
     echo -n ", "
-    set_color yellow
+    set_color cyan
     echo -n "--flags "
     set_color normal
     set_color --dim blue
@@ -160,7 +178,11 @@ function __rsd_help
     set_color --dim blue
     echo ">"
     set_color normal
-    echo "            Regex flags. May be combined (like `-f mc`)."
+    echo -n "            Regex flags. May be combined (like `"
+    set_color yellow
+    echo -n "-f mc"
+    set_color normal
+    echo "`)."
     echo ""
     echo "            c - case-sensitive"
     echo ""
@@ -170,18 +192,26 @@ function __rsd_help
     echo ""
     echo "            m - multi-line matching"
     echo ""
-    echo "            s - make `.` match newlines"
+    echo -n "            s - make `"
+    set_color yellow
+    echo -n "."
+    set_color normal
+    echo "` match newlines"
     echo ""
     echo "            w - match full words only"
     echo ""
-    set_color yellow
+    set_color cyan
     echo -n "    -h"
     set_color normal
     echo -n ", "
-    set_color yellow
+    set_color cyan
     echo --help
     set_color normal
-    echo "            Print help (see a summary with `-h`)"
+    echo -n "            Print help (see a summary with `"
+    set_color yellow
+    echo -n -h
+    set_color normal
+    echo "`)"
     echo ""
 end
 
@@ -192,22 +222,52 @@ function rsd --description 'Recursively search and replace text in files'
         F/fixed-strings 'n/max-replacements=*' 'f/flags=*' \
         -- $argv
 
-    set dir '.'
-    set dir $argv[1]
-    set find $argv[2]
-    set replace $argv[3]
+    set dir './'
+    if test (count $argv) -ge 1
+        set -f dir $argv[1]
+        set -f find $argv[2]
+        set -f replace $argv[3]
+    end
+    set -f date (date +%Y%m%d%H%M%S)
 
-    if set -q _flag_help -o -z "$find" -o -z "$replace" -o -z "$dir"
+    if set -ql _flag_help
         __rsd_help
         return 0
     end
-
     if test -z "$find" -o -z "$replace" -o ! -d "$dir"
         __rsd_usage
         return 1
     end
 
-    find $dir \( -type d -name .git -prune \) -o -type f \
-        -exec cp {} {}.$date.bk \; \
-        -exec sd $opts "$find" "$replace" {} \;
+    set -f findopts -type f
+    set -f sdopts ''
+
+    if set -ql _flag_file_pattern
+        set -p findopts -o
+        set -p findopts -name
+        set -p findopts $_flag_file_pattern
+    end
+
+    if not set -ql _flag_no_backup
+        set -p findopts -exec cp "{}" "{}.$date.bk" "\;"
+    end
+
+    if set -ql _flag_preview
+        set -p sdopts --preview
+    end
+
+    if set -ql _flag_fixed_strings
+        set -p sdopts -F
+    end
+
+    if set -ql _flag_max_replacements
+        set -p sdopts -n $_flag_max_replacements
+    end
+
+    if set -ql _flag_flags
+        set -p sdopts -f $_flag_flags
+    end
+
+    find $dir \( -type d -name .git -prune \) -o $findopts \
+        -exec sd $sdopts "$find" "$replace" {} \;
 end
