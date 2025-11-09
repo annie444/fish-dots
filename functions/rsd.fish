@@ -185,20 +185,14 @@ function __rsd_help
     echo ""
 end
 
-function rsd \
-    --description 'Recursively search and replace text in files'
+function rsd --description 'Recursively search and replace text in files'
 
-    argparse \
-        --name rsd \
-        --stop-nonopt \
-        h/help \
-        P/file-pattern \
-        b/no-backup \
-        p/preview \
-        F/fixed-strings \
-        'n/max-replacements=+' \
-        'f/flags=+' \
+    argparse --name rsd --min-args=0 --stop-nonopt \
+        h/help P/file-pattern b/no-backup p/preview \
+        F/fixed-strings 'n/max-replacements=*' 'f/flags=*' \
         -- $argv
+
+    set dir '.'
     set dir $argv[1]
     set find $argv[2]
     set replace $argv[3]
@@ -209,11 +203,11 @@ function rsd \
     end
 
     if test -z "$find" -o -z "$replace" -o ! -d "$dir"
-        echo
         __rsd_usage
-        echo
         return 1
     end
 
-    find $dir \( -type d -name .git -prune \) -o -type f --exec cp {} {}.$date.bk \; --exec sd $opts "$find" "$replace" {} \;
+    find $dir \( -type d -name .git -prune \) -o -type f \
+        -exec cp {} {}.$date.bk \; \
+        -exec sd $opts "$find" "$replace" {} \;
 end
