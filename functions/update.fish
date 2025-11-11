@@ -55,6 +55,11 @@ function _update_usage
 end
 
 function update -d "Update various tools"
+    # All for quick access to chezmoi external config paths
+    set -gx chezmoi_wezterm_path dot_config/external_wezterm
+    set -gx chezmoi_fish_path dot_config/external_fish
+    set -gx chezmoi_nvim_path dot_config/external_nvim
+
     set -l cmd (string lower "$argv[1]")
     argparse --name update -s h/help -- $argv
     if test -z "$cmd"
@@ -193,6 +198,59 @@ function _update_asdf -d "Update asdf"
     return $follow_status
 end
 
+function _partial_update -a dotfile_path -a cmd_name -a chezmoi_path -d "Pushes changes to dotfile and updates chezmoi's dotfile configs"
+    set -f _local_starting_dir (pwd)
+    set -f NOW (date "+%Y-%m-%d %H:%M:%S")
+    set -f dotfile_name (basename $dotfile_path)
+    set -f follow_status 0
+    cd $dotfile_path
+    git add -A
+    if test $status -gt $follow_status
+        set -f follow_status $status
+    end
+    git commit -m "[$NOW] ($cmd_name) Committing all changes to $dotfile_name"
+    if test $status -gt $follow_status
+        set -f follow_status $status
+    end
+    git pull
+    if test $status -gt $follow_status
+        set -f follow_status $status
+    end
+    git push
+    if test $status -gt $follow_status
+        set -f follow_status $status
+    end
+    cd ~/.local/share/chezmoi
+    git pull
+    if test $status -gt $follow_status
+        set -f follow_status $status
+    end
+    cd ~/.local/share/chezmoi/$chezmoi_path
+    git pull origin main
+    if test $status -gt $follow_status
+        set -f follow_status $status
+    end
+    git checkout main
+    if test $status -gt $follow_status
+        set -f follow_status $status
+    end
+    cd ~/.local/share/chezmoi
+    git add -A
+    if test $status -gt $follow_status
+        set -f follow_status $status
+    end
+    git commit -m "[$NOW] ($cmd_name) Pulling changes from $dotfile_name"
+    if test $status -gt $follow_status
+        set -f follow_status $status
+    end
+    git push
+    if test $status -gt $follow_status
+        set -f follow_status $status
+    end
+    cd $_local_starting_dir
+    return $follow_status
+end
+
 function _partial_neovim -d "Pushes changes to nvim-dots and updates chezmoi's neovim configs"
     argparse --name "update neovim" h/help -- $argv
     if set -ql _flag_h
@@ -207,41 +265,9 @@ function _partial_neovim -d "Pushes changes to nvim-dots and updates chezmoi's n
         return 0
     end
     set -f follow_status 0
-    begin
-        set -f _local_starting_dir (pwd)
-        set -f NOW (date "+%Y-%m-%d %H:%M:%S")
-        cd ~/.dotfiles/nvim-dots
-        git add -A
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        git commit -m "[$NOW] (update neovim) Committing all changes to nvim-dots"
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        git push
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        cd ~/.local/share/chezmoi/dot_config/external_nvim
-        git pull origin main
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        cd ~/.local/share/chezmoi
-        git add -A
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        git commit -m "[$NOW] (update neovim) Pulling changes from nvim-dots"
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        git push
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        cd $_local_starting_dir
+    _partial_update ~/.dotfiles/nvim-dots "update neovim" $chezmoi_nvim_path
+    if test $status -gt $follow_status
+        set -f follow_status $status
     end
     return $follow_status
 end
@@ -273,67 +299,9 @@ function _partial_fish -d "Pushes changes to fish-dots and updates chezmoi's fis
         return 0
     end
     set -f follow_status 0
-    begin
-        set -f _local_starting_dir (pwd)
-        set -f NOW (date "+%Y-%m-%d %H:%M:%S")
-        cd ~/.dotfiles/fish-dots
-        git add -A
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        git commit -m "[$NOW] (update fish) Committing all changes to fish-dots"
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        git pull
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        git submodule update --recursive --init
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        cd completions/
-        git pull origin main
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        cd ..
-        git add -A
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        git commit -m "[$NOW] (update fish) Committing all changes to fish-completions"
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        git push
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        cd ~/.local/share/chezmoi/dot_config/external_fish
-        git pull origin main
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        git submodule update --recursive
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        cd ~/.local/share/chezmoi
-        git add -A
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        git commit -m "[$NOW] (update fish) Pulling changes from fish-dots"
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        git push
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        cd $_local_starting_dir
+    _partial_update ~/.dotfiles/fish-dots "update fish" $chezmoi_fish_path
+    if test $status -gt $follow_status
+        set -f follow_status $status
     end
     return $follow_status
 end
@@ -365,42 +333,11 @@ function _partial_wezterm -d "Pushes changes to wezterm-dots and updates chezmoi
         return 0
     end
     set -f follow_status 0
-    begin
-        set -f _local_starting_dir (pwd)
-        set -f NOW (date "+%Y-%m-%d %H:%M:%S")
-        cd ~/.dotfiles/wezterm-dots
-        git add -A
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        git commit -m "[$NOW] (update wezterm) Committing all changes to wezterm-dots"
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        git push
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        cd ~/.local/share/chezmoi/dot_config/wezterm
-        git pull origin main
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        cd ~/.local/share/chezmoi
-        git add -A
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        git commit -m "[$NOW] (update wezterm) Pulling changes from wezterm-dots"
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        git push
-        if test $status -gt $follow_status
-            set -f follow_status $status
-        end
-        cd $_local_starting_dir
+    _partial_update ~/.dotfiles/wezterm-dots "update wezterm" $chezmoi_wezterm_path
+    if test $status -gt $follow_status
+        set -f follow_status $status
     end
+    return $follow_status
     return $follow_status
 end
 
