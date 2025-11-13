@@ -240,34 +240,36 @@ function rsd --description 'Recursively search and replace text in files'
     end
 
     set -f findopts -type f
-    set -f sdopts ''
+    set -f sdopts
 
     if set -ql _flag_file_pattern
-        set -p findopts -o
-        set -p findopts -name
-        set -p findopts $_flag_file_pattern
+        set -a findopts -o
+        set -a findopts -name
+        set -a findopts $_flag_file_pattern
     end
 
     if not set -ql _flag_no_backup
-        set -p findopts -exec cp "{}" "{}.$date.bk" "\;"
+        set -a findopts -exec cp "{}" "{}.$date.bk" ";"
     end
 
     if set -ql _flag_preview
-        set -p sdopts --preview
+        set -a sdopts --preview
     end
 
     if set -ql _flag_fixed_strings
-        set -p sdopts -F
+        set -a sdopts -F
     end
 
     if set -ql _flag_max_replacements
-        set -p sdopts -n $_flag_max_replacements
+        set -a sdopts -n $_flag_max_replacements
     end
 
     if set -ql _flag_flags
-        set -p sdopts -f $_flag_flags
+        set -a sdopts -f $_flag_flags
     end
 
-    find $dir \( -type d -name .git -prune \) -o $findopts \
+    echo "Running: find $dir ( -type d -name .git -prune ) -o $findopts -exec sd $sdopts \"$find\" \"$replace\" {} ;"
+
+    find $dir \( \( -type d -name .git \) -o \( -type f -name "*.bk" \) -prune \) -o $findopts \
         -exec sd $sdopts "$find" "$replace" {} \;
 end
