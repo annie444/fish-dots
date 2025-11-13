@@ -243,9 +243,7 @@ function rsd --description 'Recursively search and replace text in files'
     set -f sdopts
 
     if set -ql _flag_file_pattern
-        set -a findopts -o
-        set -a findopts -name
-        set -a findopts $_flag_file_pattern
+        set -a findopts -a -name $_flag_file_pattern
     end
 
     if not set -ql _flag_no_backup
