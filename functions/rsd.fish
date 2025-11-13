@@ -218,8 +218,8 @@ end
 function rsd --description 'Recursively search and replace text in files'
 
     argparse --name rsd --min-args=0 --stop-nonopt \
-        h/help P/file-pattern b/no-backup p/preview \
-        F/fixed-strings 'n/max-replacements=*' 'f/flags=*' \
+        h/help 'P/file-pattern=' b/no-backup p/preview \
+        F/fixed-strings 'n/max-replacements=' 'f/flags=' \
         -- $argv
 
     set dir './'
