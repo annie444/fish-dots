@@ -60,7 +60,7 @@ set -gx XDG_CONFIG_HOME "$HOME/.config"
 set -gx XDG_CACHE_HOME "$HOME/.cache"
 set -gx COLORTERM truecolor
 set -gx TERM xterm-256color
-set -gx PAGER ov
+set -gx PAGER less
 set -gx ASDF_DATA_DIR "$HOME/.asdf"
 set -gx ASDF_CONCURRENCY (nproc)
 set -gx ASDF_CONFIG_FILE "$HOME/.asdfrc"
@@ -80,7 +80,8 @@ set -g _user_paths \
     $HOME/.deno/bin \
     $HOME/Library/pnpm \
     $HOME/.local/share/pnpm \
-    $HOME/.opencode/bin
+    $HOME/.opencode/bin \
+    $HOME/.local/share/ovftool
 for _path in $_user_paths
     test_add_path $_path
 end
@@ -223,4 +224,4 @@ set -gx XDG_CONFIG_HOME "$HOME/.config"
 set -gx XDG_CACHE_HOME "$HOME/.cache"
 set -gx COLORTERM truecolor
 set -gx TERM xterm-256color
-set -gx PAGER ov
+set -gx PAGER less
