@@ -40,6 +40,13 @@ function test_add_functions
     end
 end
 
+function test_create_dir -a dir_path
+    if not test -d $dir_path
+        mkdir -p $dir_path
+        chmod 0755 $dir_path
+    end
+end
+
 # Set ulimits
 if test (uname) = Darwin
     ulimit -n 200000
@@ -83,7 +90,8 @@ set -g _user_paths \
     $HOME/.opencode/bin \
     $HOME/.local/share/ovftool \
     $HOME/.npm-global/bin \
-    $HOME/.bun/bin
+    $HOME/.bun/bin \
+    $HOME/.cache/.bun/bin
 for _path in $_user_paths
     test_add_path $_path
 end
@@ -222,8 +230,32 @@ end
 # Environment Config
 set -g fish_term24bit 1
 set -gx EDITOR nvim
-set -gx XDG_CONFIG_HOME "$HOME/.config"
-set -gx XDG_CACHE_HOME "$HOME/.cache"
 set -gx COLORTERM truecolor
 set -gx TERM xterm-256color
 set -gx PAGER less
+
+# XDG paths
+if set -q XDG_CONFIG_HOME
+    set -gx XDG_CONFIG_HOME "$XDG_CONFIG_HOME"
+else
+    set -gx XDG_CONFIG_HOME "$HOME/.config"
+end
+if set -q XDG_CACHE_HOME
+    set -gx XDG_CACHE_HOME "$XDG_CACHE_HOME"
+else
+    set -gx XDG_CACHE_HOME "$HOME/.cache"
+end
+if set -q XDG_DATA_HOME
+    set -gx XDG_DATA_HOME "$XDG_DATA_HOME"
+else
+    set -gx XDG_DATA_HOME "$HOME/.local/share"
+end
+if set -q XDG_STATE_HOME
+    set -gx XDG_STATE_HOME "$XDG_STATE_HOME"
+else
+    set -gx XDG_STATE_HOME "$HOME/.local/state"
+end
+test_create_dir $XDG_CONFIG_HOME
+test_create_dir $XDG_CACHE_HOME
+test_create_dir $XDG_DATA_HOME
+test_create_dir $XDG_STATE_HOME
