@@ -81,7 +81,9 @@ set -g _user_paths \
     $HOME/Library/pnpm \
     $HOME/.local/share/pnpm \
     $HOME/.opencode/bin \
-    $HOME/.local/share/ovftool
+    $HOME/.local/share/ovftool \
+    $HOME/.npm-global/bin \
+    $HOME/.bun/bin
 for _path in $_user_paths
     test_add_path $_path
 end
