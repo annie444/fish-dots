@@ -1,3 +1,10 @@
+set -gx fish_log_file "$HOME/.fish_startup.log"
+
+echo "Sourcing config.fish on $(date '+%Y-%m-%d at %H:%M:%S')" >>$fish_log_file
+function startup_log -a message
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $message" >>$fish_log_file
+end
+
 function add_path
     set -l path $argv
     if not contains $path $PATH
@@ -60,6 +67,8 @@ test_add_complete /opt/homebrew/share/fish/completions
 test_add_complete /opt/homebrew/share/fish/vendor_completions.d
 test_add_path $HOME/.atuin/bin
 
+startup_log "Added Homebrew and Atuin paths"
+
 # Environment Config
 set -gx fish_term24bit 1
 set -gx EDITOR nvim
@@ -71,6 +80,8 @@ set -gx PAGER less
 set -gx ASDF_DATA_DIR "$HOME/.asdf"
 set -gx ASDF_CONCURRENCY (nproc)
 set -gx ASDF_CONFIG_FILE "$HOME/.asdfrc"
+
+startup_log "Set basic environment variables"
 
 set -g _user_paths \
     /usr/local/bin \
@@ -97,22 +108,34 @@ for _path in $_user_paths
 end
 set --erase _user_paths
 
+startup_log "Configured user paths"
+
 # Local environment config
 direnv hook fish | source
+
+startup_log "Sourced direnv hook"
 
 status --is-interactive; and begin
     # Fish Config
     fish_config theme choose "Dracula Official"
-    set -gx fish_greeting ""
+    set -U fish_greeting ""
+    startup_log "Configured fish theme"
 
     # Plugins
     zoxide init fish | source
+    startup_log "Sourced zoxide init"
     thefuck --alias | source
+    startup_log "Sourced thefuck"
     batman --export-env | source
+    startup_log "Sourced batman"
     starship init fish | source
+    startup_log "Sourced starship"
     fzf --fish | source
+    startup_log "Sourced FZF"
     eval (batpipe)
+    startup_log "Sourced batpipe"
     atuin init fish | source
+    startup_log "Sourced atuin"
 
     # Aliases
     alias du dust
@@ -137,6 +160,7 @@ status --is-interactive; and begin
     alias note "nvim -c ':ObsidianToday<CR>'"
     alias vimdiff "nvim -d"
     alias bathelp "bat --plain --language=help"
+    startup_log "Configured aliases"
 
     # from https://docs.brew.sh/Manpage#environment
     set -gx HOMEBREW_AUTO_UPDATE_SECS 3600
@@ -149,55 +173,61 @@ status --is-interactive; and begin
     set -gx HOMEBREW_COLOR 1
     set -gx HOMEBREW_EDITOR nvim
     set -gx HOMEBREW_FAIL_LOG_LINES 1000
+    startup_log "Configured Homebrew environment variables"
 
     # Just Config
     set -gx JUST_HIGHLIGHT true
     set -gx JUST_TIMESTAMP true
     set -gx JUST_TIMESTAMP_FORMAT "%Y-%m-%d %H:%M:%S"
     set -gx JUST_UNSTABLE true
+    startup_log "Configured Just environment variables"
 
+    # Jenkins Credentials
     if test -d $HOME/.config/jenkins
         source $HOME/.config/jenkins/creds.fish
+        startup_log "Sourced Jenkins credentials"
     end
+    startup_log "Configured Jenkins credentials"
 
     # FZF Config
     # from https://github.com/PatrickF1/fzf.fish#change-fzf-options-for-a-specific-command
-    set -gx fzf_preview_dir_cmd 'eza --all --color=always'
-    set -gx fzf_preview_file_cmd 'bat --style=numbers --line-range=:500s {}'
-    set -gx fzf_diff_highlighter 'batdiff --paging=never --width=20'
+    set -gx fzf_preview_dir_cmd eza --all --follow-symlinks --sort=name --color=always --icons=always --classify=always --show-symlinks --oneline
+    set -gx fzf_preview_file_cmd bat --style=numbers
+    set -gx fzf_fd_opts --hidden --max-depth 5
+    set -gx fzf_git_log_format "format:'%C(blue)%h%C(reset) - %C(green)(%ar)%C(reset) %s %C(italic)- %an%C(reset)%C(magenta bold)%d%C(reset)'"
+    set -gx fzf_diff_highlighter delta --paging=never --width=20
     set -gx fzf_history_time_format "%Y-%m-%d %H:%M:%S"
+    startup_log "Configured patrickf1/fzf.fish plugin environment variables"
+
+    # franciscolourenco/done config
+    set -U __done_min_cmd_duration 3000 # milliseconds
+    set -U __done_exclude "^git (?!push|pull|fetch)"
+    if test (uname -s) = Darwin
+        set -U __done_notification_command "terminal-notifier -title 'Command completed' -subtitle \"\$title\" -message \"\$message\" -group \"\$ATUIN_SESSION\" -activate 'com.github.wez.wezterm' -sender 'com.github.wez.wezterm' -ignoreDnD"
+    end
+    startup_log "Configured franciscolourenco/done plugin environment variables"
 
     # from https://github.com/eth-p/bat-extras/blob/master/doc/batdiff.md
-    set -gx BATDIFF_USE_DELTA true
-
-    # Kitty config
-    if set -q KITTY_INSTALLATION_DIR
-        source "$KITTY_INSTALLATION_DIR/shell-integration/fish/vendor_conf.d/kitty-shell-integration.fish"
-        set --prepend fish_complete_path "$KITTY_INSTALLATION_DIR/shell-integration/fish/vendor_completions.d"
-    end
-
-    # LaTeX config (Linux only)
-    if test -d /usr/local/texlive/2024
-        set -gx MANPATH /usr/local/texlive/2024/texmf-dist/doc/man $MANPATH
-        set -gx INFOPATH /usr/local/texlive/2024/texmf-dist/doc/info $INFOPATH
-        set -gx PATH /usr/local/texlive/2024/bin/x86_64-linux $PATH
-    end
-
     # from https://github.com/sharkdp/bat?tab=readme-ov-file#customization
+    set -gx BATDIFF_USE_DELTA true
     set -gx BAT_THEME Dracula
     set -gx BATPIPE color
-    set -gx BATDIFF_USE_DELTA true
+    startup_log "Configured BAT environment variables"
 
     # 1Password config
     if test -e "$HOME/.config/op/plugins.sh"
         source "$HOME/.config/op/plugins.sh"
+        startup_log "Sourced 1Password plugins"
     end
+    startup_log "Configured 1Password"
 
     source ~/.gnupg/gpg.fish
+    startup_log "Configured GPG and the GPG agent"
 
     # Enable vi mode
     set -g fish_key_bindings fish_vi_key_bindings
     fish_vi_key_bindings
+    startup_log "Set fish to use vi key bindings"
 
     # Load PNPM
     if test -d "$HOME/Library/pnpm"
@@ -208,24 +238,31 @@ status --is-interactive; and begin
     if set -q PNPM_HOME
         if not string match -q -- $PNPM_HOME $PATH
             set -gx PATH "$PNPM_HOME" $PATH
+            startup_log "Added PNPM to the path at: $PNPM_HOME"
         end
     end
+    startup_log "Configured PNPM path"
 end
 
 # GCloud paths
 if test -f $HOME/.gcloud/path.fish.inc
     source $HOME/.gcloud/path.fish.inc
+    startup_log "Sourced Google Cloud SDK init script"
 end
+startup_log "Configured Google Cloud SDK"
 
 # UV options
 set -gx UV_PYTHON_PREFERENCE only-managed
 set -gx UV_LINK_MODE symlink
 set -gx UV_PRERELEASE if-necessary-or-explicit
+startup_log "Configured UV environment variables"
 
 # Override apptainer for macOS
 if test (uname) = Darwin
     alias apptainer "limactl shell apptainer"
+    startup_log "Set apptainer alias for macOS"
 end
+startup_log "Configured apptainer alias"
 
 # Environment Config
 set -g fish_term24bit 1
@@ -233,6 +270,7 @@ set -gx EDITOR nvim
 set -gx COLORTERM truecolor
 set -gx TERM xterm-256color
 set -gx PAGER less
+startup_log "Re-set basic environment variables"
 
 # XDG paths
 if set -q XDG_CONFIG_HOME
@@ -259,3 +297,4 @@ test_create_dir $XDG_CONFIG_HOME
 test_create_dir $XDG_CACHE_HOME
 test_create_dir $XDG_DATA_HOME
 test_create_dir $XDG_STATE_HOME
+startup_log "Set XDG base directories"
