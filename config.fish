@@ -200,10 +200,17 @@ status --is-interactive; and begin
     startup_log "Configured patrickf1/fzf.fish plugin environment variables"
 
     # franciscolourenco/done config
-    set -U __done_min_cmd_duration 3000 # milliseconds
-    set -U __done_exclude "^git (?!push|pull|fetch)"
+    set -gx __done_min_cmd_duration 3000 # milliseconds
+    set -gx __done_exclude "^git (?!push|pull|fetch)"
     if test (uname -s) = Darwin
-        set -U __done_notification_command "terminal-notifier -title 'Command completed' -subtitle \"\$title\" -message \"\$message\" -group \"\$ATUIN_SESSION\" -activate 'com.github.wez.wezterm' -sender 'com.github.wez.wezterm' -ignoreDnD"
+        set -gx __done_notification_command "terminal-notifier -title 'Command completed' -subtitle \"\$title\" -message \"\$message\" -group \"\$ATUIN_SESSION\" -activate 'com.github.wez.wezterm' -sender 'com.github.wez.wezterm' -ignoreDnD"
+        set -gx __done_allow_nongraphical 1
+        startup_log "Configured franciscolourenco/done plugin environment variables for macOS"
+    else if test (uname -s) = Linux
+        set -gx __done_notification_urgency_level normal
+        set -gx __done_notification_urgency_level_failure critical
+        set -gx __done_notification_duration 5000
+        startup_log "Configured franciscolourenco/done plugin environment variables for Linux"
     end
     startup_log "Configured franciscolourenco/done plugin environment variables"
 
