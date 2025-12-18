@@ -172,7 +172,7 @@ status --is-interactive; and begin
 
     # franciscolourenco/done config
     set -gx __done_min_cmd_duration 3000 # milliseconds
-    set -gx __done_exclude "^git (?!push|pull|fetch)"
+    set -gx __done_exclude "^git (?!push|pull|fetch)" "^vi" "^vim" "^nvim" "^cd" "^ls" "^eza" "^bat" "^batdiff" "^bgrep" "^bwatch" "^dust" "^du" "^ssh" "^watch" "^cat" "^fzf" "^starship" "^atuin" "^thefuck" "^zoxide" "^batman"
     if test (uname -s) = Darwin
         set -gx __done_notification_command "notify --title \"\$title\" --message \"\$message\" --group \"\$sender\" --exit-status \$exit_status"
         set -gx __done_allow_nongraphical 1
