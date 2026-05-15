@@ -115,6 +115,11 @@ status --is-interactive; and begin
     atuin init fish | source
 
     # Aliases
+    if command -v bat &>/dev/null
+        alias cat bat
+    else if command -v batcat &>/dev/null
+        alias cat batcat
+    end
     alias du dust
     alias g git
     alias vim nvim
@@ -124,7 +129,6 @@ status --is-interactive; and begin
     alias ":q" exit
     alias k kubectl
     alias kctl kubectl
-    alias cat bat
     alias bgrep batgrep
     alias bwatch batwatch
     alias find bfs
