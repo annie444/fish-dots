@@ -119,6 +119,7 @@ status --is-interactive; and begin
         alias cat bat
     else if command -v batcat &>/dev/null
         alias cat batcat
+        alias bat batcat
     end
     alias du dust
     alias g git
