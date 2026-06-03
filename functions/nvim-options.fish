@@ -5,7 +5,16 @@ function _test_var -a var -a val
     end
 end
 
-function nvim-options
+function nvim-options --description 'Generate the ~/.nvim/lua/options.lua file with the paths to the Python, Ruby, Node, Perl, and Go executables'
+    argparse u/update -- $argv
+
+    if set -ql _flag_u
+        asdf-install python latest python
+        asdf-install nodejs latest node
+        asdf-install perl latest perl
+        asdf-install golang latest go
+    end
+
     set -g _python_path (asdf which python)
     _test_var Python $_python_path
     set -g _ruby_path (which ruby)
@@ -19,11 +28,6 @@ function nvim-options
     set -g _go_exec_path (dirname $_go_path)
     set -g _go_mod_path (path normalize $_go_path/../../../bin)
 
-    begin
-        echo -e "vim.g.python3_host_prog = '$_python_path'"
-        echo -e "vim.g.ruby_host_prog = '$_ruby_path'"
-        echo -e "vim.g.node_host_prog = '$_node_path'"
-        echo -e "vim.g.perl_host_prog = '$_perl_path'"
-        echo -e "vim.env.PATH = '$_go_exec_path:$_go_mod_path:' .. vim.env.PATH"
-    end >$HOME/.config/nvim/lua/options.lua
+    printf 'vim.g.python3_host_prog = "%s"\nvim.g.ruby_host_prog = "%s"\nvim.g.node_host_prog = "%s"\nvim.g.perl_host_prog = "%s"\nvim.env.PATH = "%s:%s:" .. vim.env.PATH\n' \
+        $_python_path $_ruby_path $_node_path $_perl_path $_go_exec_path $_go_mod_path >$HOME/.config/nvim/lua/options.lua
 end
