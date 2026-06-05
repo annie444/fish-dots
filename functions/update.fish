@@ -60,10 +60,10 @@ function update -d "Update various tools"
     set -gx chezmoi_fish_path dot_config/external_fish
     set -gx chezmoi_nvim_path dot_config/external_nvim
 
-    set -l cmd (string lower "$argv[1]")
-    argparse --name update -s h/help -- $argv
+    argparse --name update h/help -- $argv
+    set cmd (string lower "$argv[1]")
     if test -z "$cmd"
-        if set -ql _flag_h
+        if set -ql _flag_h; or set -ql _flag_help
             _update_usage
             return 0
         else
@@ -75,27 +75,55 @@ function update -d "Update various tools"
     end
     switch $cmd
         case chezmoi chez
-            _update_chezmoi $_flag_h $_flag_help $argv
+            if set -ql _flag_h; or set -ql _flag_help
+                _chezmoi_usage
+                return 0
+            end
+            _update_chezmoi
         case asdf
-            _update_asdf $_flag_h $_flag_help $argv
+            if set -ql _flag_h; or set -ql _flag_help
+                _asdf_usage
+                return 0
+            end
+            _update_asdf
         case neovim nvim
-            _update_neovim $_flag_h $_flag_help $argv
+            if set -ql _flag_h; or set -ql _flag_help
+                _neovim_usage
+                return 0
+            end
+            _update_neovim
         case fish fishshell
-            _update_fish $_flag_h $_flag_help $argv
+            if set -ql _flag_h; or set -ql _flag_help
+                _fish_usage
+                return 0
+            end
+            _update_fish
         case wezterm wez
-            _update_wezterm $_flag_h $_flag_help $argv
+            if set -ql _flag_h; or set -ql _flag_help
+                _wezterm_usage
+                return 0
+            end
+            _update_wezterm
         case brew homebrew
             if test (uname) != Darwin
                 echo "The brew update target is only supported on macOS." >&2
                 return 1
             end
-            _update_brew $_flag_h $_flag_help $argv
+            if set -ql _flag_h; or set -ql _flag_help
+                _brew_usage
+                return 0
+            end
+            _update_brew
         case all
-            _partial_fish $_flag_h $_flag_help $argv
-            _partial_neovim $_flag_h $_flag_help $argv
-            _partial_wezterm $_flag_h $_flag_help $argv
-            _update_chezmoi $_flag_h $_flag_help $argv
-            _update_asdf $_flag_h $_flag_help $argv
+            if set -ql _flag_h; or set -ql _flag_help
+                _update_usage
+                return 0
+            end
+            _partial_fish
+            _partial_neovim
+            _partial_wezterm
+            _update_chezmoi
+            _update_asdf
         case *
             _echo_help -n -o -c red "Error: "
             _echo_help -n "Unknown update target: "
@@ -107,17 +135,16 @@ function update -d "Update various tools"
     return $status
 end
 
+function _brew_usage
+    _echo_help -n -o -c magenta "Usage: "
+    _echo_help -n -c cyan update
+    _echo_help -n -c FFB86C "homebrew "
+    _echo_help -c yellow "[-h|--help]"
+    _echo_help ""
+    _echo_help "Updates Homebrew and all installed packages."
+end
+
 function _update_brew -d "Update Homebrew"
-    argparse --name "update brew" h/help -- $argv
-    if set -ql _flag_h
-        _echo_help -n -o -c magenta "Usage: "
-        _echo_help -n -c cyan update
-        _echo_help -n -c FFB86C "homebrew "
-        _echo_help -c yellow "[-h|--help]"
-        _echo_help ""
-        _echo_help "Updates Homebrew and all installed packages."
-        return 0
-    end
     set -f follow_status 0
     brew cleanup
     if test $status -gt $follow_status
@@ -142,42 +169,40 @@ function _update_brew -d "Update Homebrew"
     return $follow_status
 end
 
+function _chezmoi_usage
+    _echo_help -n -o -c magenta "Usage: "
+    _echo_help -n -c cyan "update "
+    _echo_help -n -c FFB86C "chezmoi "
+    _echo_help -c yellow "[-h|--help]"
+    _echo_help ""
+    _echo_help -n "Updates chezmoi with '"
+    _echo_help -n -c cyan "chezmoi "
+    _echo_help -n -c FFB86C update
+    _echo_help "'."
+end
+
 function _update_chezmoi -d "Update chezmoi"
-    argparse --name "update chezmoi" h/help -- $argv
-    if set -ql _flag_h
-        _echo_help -n -o -c magenta "Usage: "
-        _echo_help -n -c cyan "update "
-        _echo_help -n -c FFB86C "chezmoi "
-        _echo_help -c yellow "[-h|--help]"
-        _echo_help ""
-        _echo_help -n "Updates chezmoi with '"
-        _echo_help -n -c cyan "chezmoi "
-        _echo_help -n -c FFB86C update
-        _echo_help "'."
-        return 0
-    end
     chezmoi update --recursive --recurse-submodules
     return $status
 end
 
+function _asdf_usage
+    _echo_help -n -o -c magenta "Usage: "
+    _echo_help -n -c cyan "update "
+    _echo_help -n -c FFB86C "asdf "
+    _echo_help -c yellow "[-h|--help]"
+    _echo_help ""
+    _echo_help -n "Updates asdf plugins with  '"
+    _echo_help -n -c cyan "asdf "
+    _echo_help -n -c FFB86C "plugin update "
+    _echo_help -n -c yellow --all
+    _echo_help "',"
+    _echo_help -n "and updates packages that are out of date in '"
+    _echo_help -n -c green "~/.tool-versions"
+    _echo_help "'."
+end
+
 function _update_asdf -d "Update asdf"
-    argparse --name "update asdf" h/help -- $argv
-    if set -ql _flag_h
-        _echo_help -n -o -c magenta "Usage: "
-        _echo_help -n -c cyan "update "
-        _echo_help -n -c FFB86C "asdf "
-        _echo_help -c yellow "[-h|--help]"
-        _echo_help ""
-        _echo_help -n "Updates asdf plugins with  '"
-        _echo_help -n -c cyan "asdf "
-        _echo_help -n -c FFB86C "plugin update "
-        _echo_help -n -c yellow --all
-        _echo_help "',"
-        _echo_help -n "and updates packages that are out of date in '"
-        _echo_help -n -c green "~/.tool-versions"
-        _echo_help "'."
-        return 0
-    end
     set -f follow_status 0
     asdf plugin update --all
     if test $status -gt $follow_status
@@ -251,19 +276,18 @@ function _partial_update -a dotfile_path -a cmd_name -a chezmoi_path -d "Pushes 
     return $follow_status
 end
 
+function _neovim_usage
+    _echo_help -n -o -c magenta "Usage: "
+    _echo_help -n -c cyan "update "
+    _echo_help -n -c FFB86C "neovim "
+    _echo_help -c yellow "[-h|--help]"
+    _echo_help ""
+    _echo_help -n "Updates the neovim configuration by syncing  '"
+    _echo_help -n -c green "~/.dotfiles/nvim-dots"
+    _echo_help "' with the chezmoi nvim configs."
+end
+
 function _partial_neovim -d "Pushes changes to nvim-dots and updates chezmoi's neovim configs"
-    argparse --name "update neovim" h/help -- $argv
-    if set -ql _flag_h
-        _echo_help -n -o -c magenta "Usage: "
-        _echo_help -n -c cyan "update "
-        _echo_help -n -c FFB86C "neovim "
-        _echo_help -c yellow "[-h|--help]"
-        _echo_help ""
-        _echo_help -n "Updates the neovim configuration by syncing  '"
-        _echo_help -n -c green "~/.dotfiles/nvim-dots"
-        _echo_help "' with the chezmoi nvim configs."
-        return 0
-    end
     set -f follow_status 0
     _partial_update ~/.dotfiles/nvim-dots "update neovim" $chezmoi_nvim_path
     if test $status -gt $follow_status
@@ -274,7 +298,7 @@ end
 
 function _update_neovim -d "Update neovim"
     set -f follow_status 0
-    _partial_neovim $argv
+    _partial_neovim
     if test $status -gt $follow_status
         set -f follow_status $status
     end
@@ -285,19 +309,18 @@ function _update_neovim -d "Update neovim"
     return $follow_status
 end
 
+function _fish_usage
+    _echo_help -n -o -c magenta "Usage: "
+    _echo_help -n -c cyan "update "
+    _echo_help -n -c FFB86C "fishshell "
+    _echo_help -c yellow "[-h|--help]"
+    _echo_help ""
+    _echo_help -n "Updates the fish configuration by syncing  '"
+    _echo_help -n -c green "~/.dotfiles/fish-dots"
+    _echo_help "' with the chezmoi fish configs."
+end
+
 function _partial_fish -d "Pushes changes to fish-dots and updates chezmoi's fish configs"
-    argparse --name "update fish" h/help -- $argv
-    if set -ql _flag_h
-        _echo_help -n -o -c magenta "Usage: "
-        _echo_help -n -c cyan "update "
-        _echo_help -n -c FFB86C "fishshell "
-        _echo_help -c yellow "[-h|--help]"
-        _echo_help ""
-        _echo_help -n "Updates the fish configuration by syncing  '"
-        _echo_help -n -c green "~/.dotfiles/fish-dots"
-        _echo_help "' with the chezmoi fish configs."
-        return 0
-    end
     set -f follow_status 0
     _partial_update ~/.dotfiles/fish-dots "update fish" $chezmoi_fish_path
     if test $status -gt $follow_status
@@ -308,7 +331,7 @@ end
 
 function _update_fish -d "Update fish"
     set -f follow_status 0
-    _partial_fish $argv
+    _partial_fish
     if test $status -gt $follow_status
         set -f follow_status $status
     end
@@ -319,19 +342,18 @@ function _update_fish -d "Update fish"
     return $follow_status
 end
 
+function _wezterm_usage
+    _echo_help -n -o -c magenta "Usage: "
+    _echo_help -n -c cyan "update "
+    _echo_help -n -c FFB86C "wezterm "
+    _echo_help -c yellow "[-h|--help]"
+    _echo_help ""
+    _echo_help -n "Updates the wezterm configuration by syncing  '"
+    _echo_help -n -c green "~/.dotfiles/wezterm-dots"
+    _echo_help "' with the chezmoi wezterm configs."
+end
+
 function _partial_wezterm -d "Pushes changes to wezterm-dots and updates chezmoi's wezterm configs"
-    argparse --name "update wezterm" h/help -- $argv
-    if set -ql _flag_h
-        _echo_help -n -o -c magenta "Usage: "
-        _echo_help -n -c cyan "update "
-        _echo_help -n -c FFB86C "wezterm "
-        _echo_help -c yellow "[-h|--help]"
-        _echo_help ""
-        _echo_help -n "Updates the wezterm configuration by syncing  '"
-        _echo_help -n -c green "~/.dotfiles/wezterm-dots"
-        _echo_help "' with the chezmoi wezterm configs."
-        return 0
-    end
     set -f follow_status 0
     _partial_update ~/.dotfiles/wezterm-dots "update wezterm" $chezmoi_wezterm_path
     if test $status -gt $follow_status
@@ -343,7 +365,7 @@ end
 
 function _update_wezterm -d "Update wezterm"
     set -f follow_status 0
-    _partial_wezterm $argv
+    _partial_wezterm
     if test $status -gt $follow_status
         set -f follow_status $status
     end
