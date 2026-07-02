@@ -58,7 +58,6 @@ test_add_functions /opt/homebrew/share/fish/functions
 test_add_functions /opt/homebrew/share/fish/vendor_functions.d
 test_add_complete /opt/homebrew/share/fish/completions
 test_add_complete /opt/homebrew/share/fish/vendor_completions.d
-test_add_path $HOME/.atuin/bin
 
 # Environment Config
 set -gx fish_term24bit 1
@@ -91,7 +90,9 @@ set -g _user_paths \
     $HOME/.local/share/ovftool \
     $HOME/.npm-global/bin \
     $HOME/.bun/bin \
-    $HOME/.cache/.bun/bin
+    $HOME/.cache/.bun/bin \
+    $HOME/.headroom/bin \
+    $HOME/.atuin/bin
 for _path in $_user_paths
     test_add_path $_path
 end
@@ -142,6 +143,12 @@ status --is-interactive; and begin
     alias note "nvim -c ':ObsidianToday<CR>'"
     alias vimdiff "nvim -d"
     alias bathelp "bat --plain --language=help"
+
+    if test -e "$HOME/.local/bin/headroom"
+        alias claude 'headroom wrap claude --memory --code-graph --serena'
+        alias codex 'headroom wrap codex --code-graph --serena'
+        alias copilot 'headroom wrap copilot --subscription --memory'
+    end
 
     # from https://docs.brew.sh/Manpage#environment
     set -gx HOMEBREW_AUTO_UPDATE_SECS 3600
