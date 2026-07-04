@@ -61,12 +61,8 @@ test_add_complete /opt/homebrew/share/fish/vendor_completions.d
 
 # Environment Config
 set -gx fish_term24bit 1
-set -gx EDITOR nvim
 set -gx XDG_CONFIG_HOME "$HOME/.config"
 set -gx XDG_CACHE_HOME "$HOME/.cache"
-set -gx COLORTERM truecolor
-set -gx TERM xterm-256color
-set -gx PAGER less
 set -gx ASDF_DATA_DIR "$HOME/.asdf"
 set -gx ASDF_CONCURRENCY (nproc)
 set -gx ASDF_CONFIG_FILE "$HOME/.asdfrc"
@@ -102,6 +98,9 @@ set --erase _user_paths
 direnv hook fish | source
 
 status --is-interactive; and begin
+    set -gx COLORTERM truecolor
+    set -gx TERM xterm-256color
+
     # Fish Config
     fish_config theme choose "Dracula Official"
     set -U fish_greeting ""
@@ -109,7 +108,6 @@ status --is-interactive; and begin
     # Plugins
     zoxide init fish | source
     thefuck --alias | source
-    batman --export-env | source
     starship init fish | source
     fzf --fish | source
     eval (batpipe)
@@ -149,6 +147,16 @@ status --is-interactive; and begin
         alias codex 'headroom wrap codex --code-graph --serena'
         alias copilot 'headroom wrap copilot --subscription --memory'
     end
+
+    # Less config
+    set -gx LESS '-GiRF --mouse --use-color'
+    set -gx LESS_TERMCAP_mb (set_color --bold red)
+    set -gx LESS_TERMCAP_md (set_color --bold magenta)
+    set -gx LESS_TERMCAP_me (set_color normal)
+    set -gx LESS_TERMCAP_se (set_color normal)
+    set -gx LESS_TERMCAP_so (set_color --bold cyan)
+    set -gx LESS_TERMCAP_ue (set_color normal)
+    set -gx LESS_TERMCAP_us (set_color --bold yellow)
 
     # from https://docs.brew.sh/Manpage#environment
     set -gx HOMEBREW_AUTO_UPDATE_SECS 3600
@@ -230,9 +238,9 @@ end
 # Environment Config
 set -g fish_term24bit 1
 set -gx EDITOR nvim
-set -gx COLORTERM truecolor
-set -gx TERM xterm-256color
+set -gx VISUAL nvim
 set -gx PAGER less
+set -gx MANPAGER less
 
 # XDG paths
 if set -q XDG_CONFIG_HOME
