@@ -88,7 +88,9 @@ set -g _user_paths \
     $HOME/.bun/bin \
     $HOME/.cache/.bun/bin \
     $HOME/.headroom/bin \
-    $HOME/.atuin/bin
+    $HOME/.atuin/bin \
+    /opt/homebrew/opt/krb5/bin \
+    /opt/homebrew/opt/krb5/sbin
 for _path in $_user_paths
     test_add_path $_path
 end
