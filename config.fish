@@ -138,7 +138,6 @@ status --is-interactive; and begin
     alias '..' 'z ..'
     alias ls 'eza --oneline --follow-symlinks --hyperlink --header --modified --group --mounts --octal-permissions --reverse --sort=modified --color=always --icons=always --classify=always --time-style=long-iso --git --git-repos --show-symlinks'
     alias la 'eza --oneline --follow-symlinks --hyperlink --header --modified --group --mounts --octal-permissions --reverse --sort=modified --color=always --icons=always --classify=always --time-style=long-iso --git --git-repos --show-symlinks -la'
-    alias ssh ssh
     alias esp ". $HOME/esp/esp-idf/export.fish"
     alias note "nvim -c ':ObsidianToday<CR>'"
     alias vimdiff "nvim -d"
