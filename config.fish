@@ -90,7 +90,8 @@ set -g _user_paths \
     $HOME/.headroom/bin \
     $HOME/.atuin/bin \
     /opt/homebrew/opt/krb5/bin \
-    /opt/homebrew/opt/krb5/sbin
+    /opt/homebrew/opt/krb5/sbin \
+    /opt/local/bin
 for _path in $_user_paths
     test_add_path $_path
 end
