@@ -145,8 +145,17 @@ status --is-interactive; and begin
     alias bathelp "bat --plain --language=help"
 
     if test -e "$HOME/.local/bin/headroom"
+        if type -q claude
+            alias cclaude (which claude)
+        end
         alias claude 'headroom wrap claude --memory --code-graph --serena'
+        if type -q codex
+            alias ccodex (which codex)
+        end
         alias codex 'headroom wrap codex --code-graph --serena'
+        if type -q copilot
+            alias ccopilot (which copilot)
+        end
         alias copilot 'headroom wrap copilot --subscription --memory'
     end
 
