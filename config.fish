@@ -160,7 +160,7 @@ status --is-interactive; and begin
     end
 
     # Less config
-    set -gx LESS '-GiRF --mouse --use-color'
+    set -gx LESS '-GiRF --use-color'
     set -gx LESS_TERMCAP_mb (set_color --bold red)
     set -gx LESS_TERMCAP_md (set_color --bold magenta)
     set -gx LESS_TERMCAP_me (set_color normal)
@@ -239,7 +239,7 @@ end
 # UV options
 set -gx UV_PYTHON_PREFERENCE only-managed
 set -gx UV_LINK_MODE symlink
-set -gx UV_PRERELEASE if-necessary-or-explicit
+set -gx UV_PRERELEASE if-necessary
 
 # Override apptainer for macOS
 if test (uname) = Darwin
