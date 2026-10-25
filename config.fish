@@ -137,8 +137,8 @@ status --is-interactive; and begin
     alias find bfs
     alias cd z
     alias '..' 'z ..'
-    alias ls 'eza --oneline --follow-symlinks --hyperlink --header --modified --group --mounts --octal-permissions --reverse --sort=modified --color=always --icons=always --classify=always --time-style=long-iso --git --git-repos --show-symlinks'
-    alias la 'eza --oneline --follow-symlinks --hyperlink --header --modified --group --mounts --octal-permissions --reverse --sort=modified --color=always --icons=always --classify=always --time-style=long-iso --git --git-repos --show-symlinks -la'
+    alias ls 'eza --oneline --follow-symlinks --hyperlink --modified --group --mounts --octal-permissions --sort=name --color=always --icons=always --classify=always --group-directories-first'
+    alias la 'eza --oneline --follow-symlinks --hyperlink --header --modified --group --mounts --octal-permissions --sort=name --color=always --icons=always --classify=always --time-style=long-iso --git --git-repos --show-symlinks --group-directories-first --long --all'
     alias esp ". $HOME/esp/esp-idf/export.fish"
     alias note "nvim -c ':ObsidianToday<CR>'"
     alias vimdiff "nvim -d"
